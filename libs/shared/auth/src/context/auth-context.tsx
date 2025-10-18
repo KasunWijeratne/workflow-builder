@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
   user: User | null;
+  loading: boolean;
   login: (
     email: string,
     password: string,
@@ -27,6 +28,7 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const login = async (
@@ -34,14 +36,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     password: string,
     successRedirect: string
   ) => {
+    setLoading(true);
     const res = await authService().signIn({ email, password });
-    setUser({
+    setUser(() => ({
       id: res.user.uid,
       email: res.user.email || '',
-      name: res.user.displayName || '',
-      roles: [],
-    });
+      roles: res.roles,
+    }));
     navigate(successRedirect);
+    setLoading(false);
   };
 
   const signUp = async (
@@ -50,8 +53,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     roles: Role[],
     successRedirect: string
   ) => {
+    setLoading(true);
     await authService().signUp({ email, password, roles });
     navigate(successRedirect);
+    setLoading(false);
   };
 
   const logout = async () => {
@@ -67,6 +72,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     <AuthContext.Provider
       value={{
         user,
+        loading,
         login,
         signUp,
         logout,

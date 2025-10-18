@@ -9,10 +9,10 @@ export const dashboardRoutes: AppRouteObject[] = [
   {
     path: '/dashboard',
     meta: {
-      permissions: [Role.VIEWER],
+      permissions: [Role.EDITOR],
     },
     element: (
-      <ProtectedRoute permissions={[Role.VIEWER]}>
+      <ProtectedRoute permissions={[Role.EDITOR]}>
         <Suspense fallback={null}>
           <Dashboard />
         </Suspense>

@@ -3,8 +3,16 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   AuthError,
+  User,
 } from 'firebase/auth';
-import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import {
+  addDoc,
+  getDocs,
+  collection,
+  getFirestore,
+  where,
+  query,
+} from 'firebase/firestore';
 import { app } from '../auth.config';
 import { Role } from '../types/user.type';
 
@@ -12,10 +20,21 @@ const authService = () => {
   const auth = getAuth(app);
   const db = getFirestore();
 
-  const signIn = async (credentials: { email: string; password: string }) => {
+  const signIn = async (credentials: {
+    email: string;
+    password: string;
+  }): Promise<{ user: User; roles: Role[] }> => {
     const { email, password } = credentials;
     try {
-      return signInWithEmailAndPassword(auth, email, password);
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      const usersCollection = collection(db, 'users');
+      const q = query(usersCollection, where('uid', '==', user.uid));
+      const querySnapshot = await getDocs(q);
+      const { roles } = querySnapshot.docs[0].data();
+      return {
+        user,
+        roles,
+      };
     } catch (error) {
       console.error('Login error:', (error as AuthError).code);
       throw error;
@@ -36,10 +55,8 @@ const authService = () => {
       );
       const usersCollection = collection(db, 'users');
       await addDoc(usersCollection, {
-        email,
-        password,
         roles,
-        uuid: user.uid,
+        uid: user.uid,
       });
     } catch (error) {
       console.error('Login error:', (error as AuthError).code);

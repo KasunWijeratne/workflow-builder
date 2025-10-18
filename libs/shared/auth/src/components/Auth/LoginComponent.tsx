@@ -1,13 +1,13 @@
 import { useRef } from 'react';
 import { Button, Card, Input } from '@shared/ui';
-import styles from './auth.module.css';
 import { useAuth } from '../../context/auth-context';
+import styles from './auth.module.css';
 
 export const LoginComponent = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
 
   const handleLogin = async () => {
     const email = emailRef.current?.value;
@@ -38,6 +38,7 @@ export const LoginComponent = () => {
           fullWidth
           variant="contained"
           color="primary"
+          loading={loading}
           onClick={handleLogin}
         >
           Login

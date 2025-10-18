@@ -16,10 +16,6 @@ export const ProtectedRoute = ({
   const { user } = useAuth();
   const location = useLocation();
 
-  //   if (isLoading) {
-  //     return <div>Loading...</div>;
-  //   }
-
   if (!user) {
     return <Navigate to={fallbackPath} state={{ from: location }} replace />;
   }

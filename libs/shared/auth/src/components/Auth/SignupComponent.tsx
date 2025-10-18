@@ -1,15 +1,15 @@
 import { useRef, useState } from 'react';
 import { Button, Card, Input, Select, MenuItem, Chip } from '@shared/ui';
-import styles from './auth.module.css';
 import { useAuth } from '../../context/auth-context';
 import { Role } from '../../types/user.type';
+import styles from './auth.module.css';
 
 export const SignupComponent = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [roles, setRoles] = useState<Role[]>([]);
 
-  const { signUp } = useAuth();
+  const { signUp, loading } = useAuth();
 
   const handleSignup = async () => {
     const email = emailRef.current?.value;
@@ -63,6 +63,7 @@ export const SignupComponent = () => {
           fullWidth
           variant="contained"
           color="primary"
+          loading={loading}
           onClick={handleSignup}
         >
           Sign Up
