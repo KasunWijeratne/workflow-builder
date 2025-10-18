@@ -1,1 +1,3 @@
-export * from './lib/ui';
+export * from './components/Button';
+export * from './components/Card';
+export * from './components/Input';

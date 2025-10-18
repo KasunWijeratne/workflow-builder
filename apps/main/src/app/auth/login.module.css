@@ -1,0 +1,13 @@
+.layout__login {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  height: 400px;
+  width: 400px;
+  padding: 20px;
+}
