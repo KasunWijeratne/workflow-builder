@@ -1,5 +1,12 @@
+import { TopbarLayout } from '@shared/ui';
+import { Link } from 'react-router-dom';
+
 const Dashboard = () => {
-  return <div>Dashboard</div>;
+  return (
+    <TopbarLayout>
+      <Link to={'/diagram'}>Diagram</Link>
+    </TopbarLayout>
+  );
 };
 
 export default Dashboard;

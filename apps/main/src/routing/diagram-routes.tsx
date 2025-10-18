@@ -8,7 +8,7 @@ const Diagram = React.lazy(() => import('@/app/diagram/diagram'));
 
 export const diagramRoutes: RouteObject[] = [
   {
-    path: '/workflows',
+    path: '/diagram',
     handle: {
       permissions: [Role.EDITOR, Role.VIEWER],
     },
