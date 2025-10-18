@@ -1,15 +1,10 @@
 import { RouteObject } from 'react-router-dom';
-
-//TODO: move this to types module
-enum RoutePermission {
-  VIEWER = 'VIEWER',
-  EDITOR = 'EDITOR',
-}
+import { Role } from '@shared/auth';
 
 export interface RouteMetadata {
   title?: string;
   description?: string;
-  permissions: RoutePermission[];
+  permissions: Role[];
   icon?: string;
 }
 
