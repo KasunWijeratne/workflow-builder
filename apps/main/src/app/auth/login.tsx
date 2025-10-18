@@ -1,7 +1,7 @@
-import { LoginComponent } from '@shared/auth';
+import { LoginComponent, SignupComponent } from '@shared/auth';
 
 const Login = () => {
-  return <LoginComponent />;
+  return <SignupComponent />;
 };
 
 export default Login;

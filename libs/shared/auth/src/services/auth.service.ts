@@ -2,9 +2,9 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  // signOut,
+  AuthError,
 } from 'firebase/auth';
-import { addDoc, collection, doc, getFirestore } from 'firebase/firestore';
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import { app } from '../auth.config';
 import { Role } from '../types/user.type';
 
@@ -14,24 +14,37 @@ const authService = () => {
 
   const signIn = async (credentials: { email: string; password: string }) => {
     const { email, password } = credentials;
-    return signInWithEmailAndPassword(auth, email, password);
+    try {
+      return signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error('Login error:', (error as AuthError).code);
+      throw error;
+    }
   };
 
   const signUp = async (credentials: {
     email: string;
     password: string;
-    role: Role;
+    roles: Role[];
   }) => {
-    const { email, password } = credentials;
-    const user = await createUserWithEmailAndPassword(auth, email, password);
-    debugger;
-    const usersCollection = collection(db, 'users');
-    // const docRef = await addDoc(usersCollection, {
-    //   email,
-    //   password,
-    //   role,
-    //   uuid: user,
-    // });
+    const { email, password, roles } = credentials;
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const usersCollection = collection(db, 'users');
+      await addDoc(usersCollection, {
+        email,
+        password,
+        roles,
+        uuid: user.uid,
+      });
+    } catch (error) {
+      console.error('Login error:', (error as AuthError).code);
+      throw error;
+    }
   };
 
   return {

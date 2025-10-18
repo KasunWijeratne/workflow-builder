@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { Button, Card, Input, Select, MenuItem } from '@shared/ui';
+import { useRef, useState } from 'react';
+import { Button, Card, Input, Select, MenuItem, Chip } from '@shared/ui';
 import styles from './auth.module.css';
 import { useAuth } from '../../context/auth-context';
 import { Role } from '../../types/user.type';
@@ -7,17 +7,16 @@ import { Role } from '../../types/user.type';
 export const SignupComponent = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const roleRef = useRef<HTMLInputElement>(null);
+  const [roles, setRoles] = useState<Role[]>([]);
 
   const { signUp } = useAuth();
 
   const handleSignup = async () => {
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
-    const role = roleRef.current?.value as Role;
 
-    if (email && password && role) {
-      await signUp(email, password, role, '/dashboard');
+    if (email && password) {
+      await signUp(email, password, roles, '/dashboard');
     }
   };
 
@@ -37,7 +36,26 @@ export const SignupComponent = () => {
           type="password"
           margin="normal"
         />
-        <Select fullWidth inputRef={roleRef}>
+        <Select
+          fullWidth
+          multiple
+          value={roles}
+          onChange={(event) => {
+            const {
+              target: { value },
+            } = event;
+            setRoles(
+              typeof value === 'string' ? (value.split(',') as Role[]) : value
+            );
+          }}
+          renderValue={(selected: Role[]) => (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </div>
+          )}
+        >
           <MenuItem value={Role.VIEWER}>{Role.VIEWER}</MenuItem>
           <MenuItem value={Role.EDITOR}>{Role.EDITOR}</MenuItem>
         </Select>

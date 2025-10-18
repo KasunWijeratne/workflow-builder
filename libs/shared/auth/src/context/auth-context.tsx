@@ -1,7 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 import { Role, User } from '../types/user.type';
 import authService from '../services/auth.service';
-import { AuthError } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
@@ -14,7 +13,7 @@ interface AuthContextType {
   signUp: (
     email: string,
     password: string,
-    role: Role,
+    roles: Role[],
     successRedirect: string
   ) => Promise<void>;
   logout: () => Promise<void>;
@@ -35,28 +34,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     password: string,
     successRedirect: string
   ) => {
-    try {
-      const res = await authService().signIn({ email, password });
-      setUser({
-        id: res.user.uid,
-        email: res.user.email || '',
-        name: res.user.displayName || '',
-        roles: [],
-      });
-      navigate(successRedirect);
-    } catch (error: AuthError | unknown) {
-      console.error('Login error:', (error as AuthError).code);
-      throw error;
-    }
+    const res = await authService().signIn({ email, password });
+    setUser({
+      id: res.user.uid,
+      email: res.user.email || '',
+      name: res.user.displayName || '',
+      roles: [],
+    });
+    navigate(successRedirect);
   };
 
   const signUp = async (
     email: string,
     password: string,
-    role: string,
+    roles: Role[],
     successRedirect: string
   ) => {
-    //Signup code
+    await authService().signUp({ email, password, roles });
+    navigate(successRedirect);
   };
 
   const logout = async () => {
