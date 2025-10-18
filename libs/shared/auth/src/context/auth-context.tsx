@@ -1,5 +1,7 @@
-import { createContext, ReactNode, useContext } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 import { User } from '../types/user.type';
+import authService from '../services/auth.service';
+import { AuthError } from 'firebase/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -14,11 +16,19 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<User | null>(null);
+
   const login = async (email: string, password: string) => {
     try {
-      //TODO: handle login here
-    } catch (error) {
-      console.error('Login error:', error);
+      const res = await authService().signIn({ email, password });
+      setUser({
+        id: res.user.uid,
+        email: res.user.email || '',
+        name: res.user.displayName || '',
+        roles: [],
+      });
+    } catch (error: AuthError | unknown) {
+      console.error('Login error:', (error as AuthError).code);
       throw error;
     }
   };
@@ -35,7 +45,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
     <AuthContext.Provider
       value={{
-        user: null,
+        user,
         login,
         logout,
       }}
