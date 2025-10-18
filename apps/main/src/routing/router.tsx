@@ -3,6 +3,7 @@ import { authRoutes } from './auth-routes';
 import { useMemo } from 'react';
 import { AppRouteObject } from '@/types/router.type';
 import { dashboardRoutes } from './dashboard-routes';
+import RootRoute from './root-route';
 
 const renderRoute = (route: AppRouteObject) => {
   const key = route.id ?? route.path ?? Math.random().toString();
@@ -39,7 +40,12 @@ const Router = () => {
     return [...baseRoutes, ...authorized];
   }, [user]);
 
-  return <Routes>{routes.map((route) => renderRoute(route))}</Routes>;
+  return (
+    <Routes>
+      <Route path="/" element={<RootRoute />} />
+      {routes.map((route) => renderRoute(route))}
+    </Routes>
+  );
 };
 
 export default Router;
