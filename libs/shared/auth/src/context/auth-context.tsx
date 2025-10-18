@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
-import { User } from '../types/user.type';
+import { Role, User } from '../types/user.type';
 import authService from '../services/auth.service';
 import { AuthError } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,12 @@ interface AuthContextType {
   login: (
     email: string,
     password: string,
+    successRedirect: string
+  ) => Promise<void>;
+  signUp: (
+    email: string,
+    password: string,
+    role: Role,
     successRedirect: string
   ) => Promise<void>;
   logout: () => Promise<void>;
@@ -44,6 +50,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const signUp = async (
+    email: string,
+    password: string,
+    role: string,
+    successRedirect: string
+  ) => {
+    //Signup code
+  };
+
   const logout = async () => {
     try {
       //TODO: handle logout here
@@ -58,6 +73,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       value={{
         user,
         login,
+        signUp,
         logout,
       }}
     >

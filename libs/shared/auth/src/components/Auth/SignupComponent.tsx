@@ -1,20 +1,23 @@
 import { useRef } from 'react';
-import { Button, Card, Input } from '@shared/ui';
-import styles from './login.module.css';
+import { Button, Card, Input, Select, MenuItem } from '@shared/ui';
+import styles from './auth.module.css';
 import { useAuth } from '../../context/auth-context';
+import { Role } from '../../types/user.type';
 
-export const LoginComponent = () => {
+export const SignupComponent = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const roleRef = useRef<HTMLInputElement>(null);
 
-  const { login } = useAuth();
+  const { signUp } = useAuth();
 
-  const handleLogin = async () => {
+  const handleSignup = async () => {
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
+    const role = roleRef.current?.value as Role;
 
-    if (email && password) {
-      await login(email, password, '/dashboard');
+    if (email && password && role) {
+      await signUp(email, password, role, '/dashboard');
     }
   };
 
@@ -34,17 +37,21 @@ export const LoginComponent = () => {
           type="password"
           margin="normal"
         />
+        <Select fullWidth inputRef={roleRef}>
+          <MenuItem value={Role.VIEWER}>{Role.VIEWER}</MenuItem>
+          <MenuItem value={Role.EDITOR}>{Role.EDITOR}</MenuItem>
+        </Select>
         <Button
           fullWidth
           variant="contained"
           color="primary"
-          onClick={handleLogin}
+          onClick={handleSignup}
         >
-          Login
+          Sign Up
         </Button>
       </Card>
     </div>
   );
 };
 
-export default LoginComponent;
+export default SignupComponent;

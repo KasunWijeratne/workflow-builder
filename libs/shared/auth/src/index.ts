@@ -1,4 +1,5 @@
-export * from './components/Login/LoginComponent';
+export * from './components/Auth/LoginComponent';
+export * from './components/Auth/SignupComponent';
 
 export * from './types/user.type';
 
