@@ -1,5 +1,7 @@
 import { AppRouteObject } from '@/types/router.type';
 import React, { Suspense } from 'react';
+import { Role } from '@shared/auth';
+import { ProtectedRoute } from './protected-route';
 
 const Dashboard = React.lazy(() => import('@/app/dashboard/dashboard'));
 
@@ -7,12 +9,14 @@ export const dashboardRoutes: AppRouteObject[] = [
   {
     path: '/dashboard',
     meta: {
-      permissions: [],
+      permissions: [Role.VIEWER],
     },
     element: (
-      <Suspense fallback={null}>
-        <Dashboard />
-      </Suspense>
+      <ProtectedRoute permissions={[Role.VIEWER]}>
+        <Suspense fallback={null}>
+          <Dashboard />
+        </Suspense>
+      </ProtectedRoute>
     ),
   },
 ];

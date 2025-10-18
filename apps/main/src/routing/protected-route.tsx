@@ -1,0 +1,36 @@
+import { ReactNode } from 'react';
+import { Role, useAuth } from '@shared/auth';
+import { Navigate, useLocation } from 'react-router-dom';
+
+interface ProtectedRouteProps {
+  children: ReactNode;
+  permissions?: Role[];
+  fallbackPath?: string;
+}
+
+export const ProtectedRoute = ({
+  children,
+  permissions,
+  fallbackPath = '/login',
+}: ProtectedRouteProps) => {
+  const { user } = useAuth();
+  const location = useLocation();
+
+  //   if (isLoading) {
+  //     return <div>Loading...</div>;
+  //   }
+
+  if (!user) {
+    return <Navigate to={fallbackPath} state={{ from: location }} replace />;
+  }
+
+  if (permissions && permissions.length > 0) {
+    const isAllowed = user.roles.some((role) => permissions.includes(role));
+
+    if (!isAllowed) {
+      return <Navigate to="/unauthorized" replace />;
+    }
+  }
+
+  return children;
+};

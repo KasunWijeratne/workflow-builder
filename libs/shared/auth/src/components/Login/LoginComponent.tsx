@@ -13,7 +13,9 @@ export const LoginComponent = () => {
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
 
-    await login(email || '', password || '');
+    if (email && password) {
+      await login(email, password, '/dashboard');
+    }
   };
 
   return (

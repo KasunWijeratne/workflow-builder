@@ -2,10 +2,15 @@ import { createContext, ReactNode, useContext, useState } from 'react';
 import { User } from '../types/user.type';
 import authService from '../services/auth.service';
 import { AuthError } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (
+    email: string,
+    password: string,
+    successRedirect: string
+  ) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -17,8 +22,13 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
 
-  const login = async (email: string, password: string) => {
+  const login = async (
+    email: string,
+    password: string,
+    successRedirect: string
+  ) => {
     try {
       const res = await authService().signIn({ email, password });
       setUser({
@@ -27,6 +37,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         name: res.user.displayName || '',
         roles: [],
       });
+      navigate(successRedirect);
     } catch (error: AuthError | unknown) {
       console.error('Login error:', (error as AuthError).code);
       throw error;

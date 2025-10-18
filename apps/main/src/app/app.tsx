@@ -15,7 +15,7 @@ initAuth(firebaseConfig);
 function App() {
   return (
     <AuthProvider>
-      <Router />;
+      <Router />
     </AuthProvider>
   );
 }

@@ -2,9 +2,9 @@ import { RouteObject } from 'react-router-dom';
 import { Role } from '@shared/auth';
 
 export interface RouteMetadata {
+  permissions: Role[];
   title?: string;
   description?: string;
-  permissions: Role[];
   icon?: string;
 }
 

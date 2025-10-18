@@ -1,9 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
 import { authRoutes } from './auth-routes';
-import { useMemo } from 'react';
 import { AppRouteObject } from '@/types/router.type';
 import { dashboardRoutes } from './dashboard-routes';
 import RootRoute from './root-route';
+import { diagramRoutes } from './diagram-routes';
 
 const renderRoute = (route: AppRouteObject) => {
   const key = route.id ?? route.path ?? Math.random().toString();
@@ -16,29 +16,8 @@ const renderRoute = (route: AppRouteObject) => {
   );
 };
 
-const getAuthorisedRoutes = (user: unknown) => {
-  const authenticated = dashboardRoutes;
-  const authorised: AppRouteObject[] = [];
-
-  if (user) {
-    authorised.push(...authenticated);
-  }
-
-  //TODO: handle role based routes
-
-  return authorised;
-};
-
 const Router = () => {
-  //TODO: get from the auth module
-  const user = null;
-
-  const routes = useMemo(() => {
-    const baseRoutes = [...authRoutes];
-    const authorized = getAuthorisedRoutes(user);
-
-    return [...baseRoutes, ...authorized];
-  }, [user]);
+  const routes = [...authRoutes, ...dashboardRoutes, ...diagramRoutes];
 
   return (
     <Routes>
