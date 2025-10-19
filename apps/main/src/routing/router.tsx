@@ -2,8 +2,8 @@ import { Route, Routes } from 'react-router-dom';
 import { authRoutes } from './auth-routes';
 import { AppRouteObject } from '@/types/router.type';
 import { dashboardRoutes } from './dashboard-routes';
-import RootRoute from './root-route';
 import { diagramRoutes } from './diagram-routes';
+import RootRoute from './root-route';
 
 const renderRoute = (route: AppRouteObject) => {
   const key = route.id ?? route.path ?? Math.random().toString();

@@ -3,7 +3,7 @@ import { RouteObject } from 'react-router-dom';
 import { Role } from '@shared/auth';
 import { ProtectedRoute } from './protected-route';
 
-const AllDiagrams = React.lazy(() => import('@/app/diagram/all-diagrams'));
+const NewDiagram = React.lazy(() => import('@/app/diagram/new-diagram'));
 const Diagram = React.lazy(() => import('@/app/diagram/diagram'));
 
 export const diagramRoutes: RouteObject[] = [
@@ -12,14 +12,17 @@ export const diagramRoutes: RouteObject[] = [
     handle: {
       permissions: [Role.EDITOR, Role.VIEWER],
     },
-    element: (
-      <ProtectedRoute permissions={[Role.EDITOR, Role.VIEWER]}>
-        <Suspense fallback={null}>
-          <AllDiagrams />
-        </Suspense>
-      </ProtectedRoute>
-    ),
     children: [
+      {
+        path: 'new',
+        element: (
+          <ProtectedRoute permissions={[Role.EDITOR, Role.VIEWER]}>
+            <Suspense fallback={null}>
+              <NewDiagram />
+            </Suspense>
+          </ProtectedRoute>
+        ),
+      },
       {
         path: ':id',
         element: (

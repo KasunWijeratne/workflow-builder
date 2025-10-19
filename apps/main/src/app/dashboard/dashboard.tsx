@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Dashboard = () => {
   return (
     <TopbarLayout>
-      <Link to={'/diagram'}>Diagram</Link>
+      <Link to={'/diagram/new'}>Diagram</Link>
     </TopbarLayout>
   );
 };

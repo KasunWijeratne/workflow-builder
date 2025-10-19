@@ -16,7 +16,7 @@ interface CanvasProps {
   onConnect: (data: Edge | Connection) => void;
 }
 
-const Canvas = ({
+export const Canvas = ({
   nodes,
   edges,
   onNodesChange,
