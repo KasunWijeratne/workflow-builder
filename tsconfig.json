@@ -14,6 +14,9 @@
     },
     {
       "path": "./libs/shared/canvas"
+    },
+    {
+      "path": "./libs/shared/nodes/custom-label"
     }
   ]
 }

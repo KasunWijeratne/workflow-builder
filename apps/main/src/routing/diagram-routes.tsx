@@ -16,11 +16,11 @@ export const diagramRoutes: RouteObject[] = [
       {
         path: 'new',
         element: (
-          <ProtectedRoute permissions={[Role.EDITOR, Role.VIEWER]}>
-            <Suspense fallback={null}>
-              <NewDiagram />
-            </Suspense>
-          </ProtectedRoute>
+          // <ProtectedRoute permissions={[Role.EDITOR, Role.VIEWER]}>
+          <Suspense fallback={null}>
+            <NewDiagram />
+          </Suspense>
+          // </ProtectedRoute>
         ),
       },
       {

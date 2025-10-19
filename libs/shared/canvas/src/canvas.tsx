@@ -5,10 +5,11 @@ import {
   OnNodesChange,
   OnEdgesChange,
   Connection,
+  ReactFlowProps,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
-interface CanvasProps {
+interface CanvasProps extends ReactFlowProps {
   nodes: Node[];
   edges: Edge[];
   onNodesChange: OnNodesChange;
@@ -16,23 +17,8 @@ interface CanvasProps {
   onConnect: (data: Edge | Connection) => void;
 }
 
-export const Canvas = ({
-  nodes,
-  edges,
-  onNodesChange,
-  onEdgesChange,
-  onConnect,
-}: CanvasProps) => {
-  return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      fitView
-    />
-  );
+export const Canvas = (props: CanvasProps) => {
+  return <ReactFlow {...props} fitView />;
 };
 
 export default Canvas;

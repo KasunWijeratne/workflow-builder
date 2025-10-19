@@ -35,6 +35,12 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "references": [
     {
+      "path": "../../libs/shared/nodes/custom-label/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/shared/canvas/tsconfig.lib.json"
+    },
+    {
       "path": "../../libs/shared/ui/tsconfig.lib.json"
     },
     {

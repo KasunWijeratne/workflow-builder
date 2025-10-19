@@ -3,6 +3,12 @@
   "include": [],
   "references": [
     {
+      "path": "../../libs/shared/nodes/custom-label"
+    },
+    {
+      "path": "../../libs/shared/canvas"
+    },
+    {
       "path": "../../libs/shared/ui"
     },
     {
