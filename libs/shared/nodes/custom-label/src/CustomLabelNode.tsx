@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { Box, IconButton, Input, DoneIcon, EditIcon } from '@shared/ui';
+import { Role, RoleGate } from '@shared/auth';
 import { Position, Handle, NodeProps, useReactFlow } from '@xyflow/react';
 
 export const nodeType = 'customLabel';
@@ -39,9 +40,11 @@ export const CustomLabelNode = (props: NodeProps) => {
       ) : (
         <>
           <span>{label}</span>
-          <IconButton onClick={() => setEditable(!editable)} size="small">
-            <EditIcon />
-          </IconButton>
+          <RoleGate permissions={[Role.EDITOR]}>
+            <IconButton onClick={() => setEditable(!editable)} size="small">
+              <EditIcon />
+            </IconButton>
+          </RoleGate>
         </>
       )}
 

@@ -8,6 +8,8 @@ import {
   ReactFlowProps,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { useMemo } from 'react';
+import { Role, useAuth } from '@shared/auth';
 
 interface CanvasProps extends ReactFlowProps {
   nodes: Node[];
@@ -18,7 +20,19 @@ interface CanvasProps extends ReactFlowProps {
 }
 
 export const Canvas = (props: CanvasProps) => {
-  return <ReactFlow {...props} fitView />;
+  const { isAllowed } = useAuth();
+
+  const validProps = useMemo(
+    () => ({
+      ...props,
+      draggable: isAllowed([Role.EDITOR]),
+      elementsSelectable: isAllowed([Role.EDITOR]),
+      nodesDraggable: isAllowed([Role.EDITOR]),
+    }),
+    [isAllowed, props]
+  );
+
+  return <ReactFlow {...validProps} fitView />;
 };
 
 export default Canvas;

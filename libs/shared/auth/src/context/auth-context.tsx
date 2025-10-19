@@ -1,6 +1,7 @@
 import {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -24,6 +25,7 @@ interface AuthContextType {
     successRedirect: string
   ) => Promise<void>;
   logout: () => Promise<void>;
+  isAllowed: (allowedRoles: Role[]) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -74,6 +76,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const isAllowed = useCallback(
+    (allowedRoles: Role[]): boolean => {
+      if (!user) return false;
+      return user.roles.some((role) => allowedRoles.includes(role));
+    },
+    [user]
+  );
+
   useEffect(() => {
     const unsubscribe = authService().checkUser((currentUser) => {
       const { user, roles } = currentUser || {};
@@ -96,6 +106,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         login,
         signUp,
         logout,
+        isAllowed,
       }}
     >
       {children}
