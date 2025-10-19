@@ -1,10 +1,12 @@
 import {
   addDoc,
   getDocs,
+  getDoc,
   collection,
   getFirestore,
   where,
   query,
+  doc,
 } from 'firebase/firestore';
 import { Diagram } from '../types/diagram.type';
 import { FirebaseError } from '@firebase/util';
@@ -39,7 +41,7 @@ const diagramService = () => {
     nodes,
     edges,
     name,
-  }: Diagram) => {
+  }: Omit<Diagram, 'id'>) => {
     try {
       const diagramsCollection = collection(db, 'diagrams');
       await addDoc(diagramsCollection, {
@@ -54,9 +56,21 @@ const diagramService = () => {
     }
   };
 
+  const getDiagramById = async (id: string) => {
+    try {
+      const diagramDoc = doc(db, 'diagrams', id);
+      const diagram = await getDoc(diagramDoc);
+      return diagram.data();
+    } catch (error) {
+      console.error('Fetch diagram error:', (error as FirebaseError).code);
+      throw error;
+    }
+  };
+
   return {
     createNewDiagram,
     getDiagrams,
+    getDiagramById,
   };
 };
 

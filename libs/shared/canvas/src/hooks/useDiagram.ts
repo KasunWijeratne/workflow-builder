@@ -14,7 +14,7 @@ export const useDiagram = () => {
     return diagrams;
   };
 
-  const createDiagram = async (diagram: Omit<Diagram, 'createdBy'>) => {
+  const createDiagram = async (diagram: Omit<Diagram, 'createdBy' | 'id'>) => {
     setLoading(true);
     await diagramService().createNewDiagram({
       ...diagram,
@@ -23,10 +23,18 @@ export const useDiagram = () => {
     setLoading(false);
   };
 
+  const getDiagramById = async (id: string) => {
+    setLoading(true);
+    const data = await diagramService().getDiagramById(id);
+    setLoading(false);
+    return data;
+  };
+
   return {
     loading,
     createDiagram,
     getDiagrams,
+    getDiagramById,
   };
 };
 
