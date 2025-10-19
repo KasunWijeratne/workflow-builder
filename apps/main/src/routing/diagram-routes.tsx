@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { RouteObject } from 'react-router-dom';
 import { Role } from '@shared/auth';
 import { ProtectedRoute } from './protected-route';
+import { ReactFlowProvider } from '@xyflow/react';
 
 const NewDiagram = React.lazy(() => import('@/app/diagram/new-diagram'));
 const Diagram = React.lazy(() => import('@/app/diagram/diagram'));
@@ -16,11 +17,13 @@ export const diagramRoutes: RouteObject[] = [
       {
         path: 'new',
         element: (
-          // <ProtectedRoute permissions={[Role.EDITOR, Role.VIEWER]}>
-          <Suspense fallback={null}>
-            <NewDiagram />
-          </Suspense>
-          // </ProtectedRoute>
+          <ProtectedRoute permissions={[Role.EDITOR, Role.VIEWER]}>
+            <Suspense fallback={null}>
+              <ReactFlowProvider>
+                <NewDiagram />
+              </ReactFlowProvider>
+            </Suspense>
+          </ProtectedRoute>
         ),
       },
       {
@@ -28,7 +31,9 @@ export const diagramRoutes: RouteObject[] = [
         element: (
           <ProtectedRoute permissions={[Role.EDITOR, Role.VIEWER]}>
             <Suspense fallback={null}>
-              <Diagram />
+              <ReactFlowProvider>
+                <Diagram />
+              </ReactFlowProvider>
             </Suspense>
           </ProtectedRoute>
         ),

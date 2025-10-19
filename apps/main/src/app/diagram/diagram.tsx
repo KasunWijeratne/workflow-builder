@@ -18,15 +18,6 @@ import {
 } from '@shared/nodes-customlabel';
 import { useParams } from 'react-router-dom';
 
-const initialNodes = [
-  {
-    id: 'n1',
-    type: customLabelNodeType,
-    position: { x: 0, y: 0 },
-    data: { label: 'Node 1' },
-  },
-];
-
 const nodeTypes = {
   [customLabelNodeType]: CustomLabelNode,
 };
@@ -38,13 +29,11 @@ const ViewDiagram = () => {
   const reactFlowWrapper = useRef(null);
 
   //TODO: check if this can be moved into the canvas module
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { screenToFlowPosition } = useReactFlow();
   const { createDiagram, getDiagramById } = useDiagram();
   const { id } = useParams();
-
-  console.log('id', id);
 
   const controls = useMemo(() => {
     return (
@@ -111,7 +100,10 @@ const ViewDiagram = () => {
   useEffect(() => {
     const fetchDiagram = async (id: string) => {
       const data = await getDiagramById(id);
-      console.log('data', data);
+      const nodesData = data?.nodes ? JSON.parse(data.nodes) : [];
+      const edgesData = data?.edges ? JSON.parse(data.edges) : [];
+      setNodes(nodesData);
+      setEdges(edgesData);
     };
 
     if (id) {
