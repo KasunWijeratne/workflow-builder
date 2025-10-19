@@ -7,6 +7,13 @@ export const useDiagram = () => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
+  const getDiagrams = async (): Promise<Diagram[]> => {
+    setLoading(true);
+    const diagrams = await diagramService().getDiagrams(user?.id || '');
+    setLoading(false);
+    return diagrams;
+  };
+
   const createDiagram = async (diagram: Omit<Diagram, 'createdBy'>) => {
     setLoading(true);
     await diagramService().createNewDiagram({
@@ -19,6 +26,7 @@ export const useDiagram = () => {
   return {
     loading,
     createDiagram,
+    getDiagrams,
   };
 };
 
