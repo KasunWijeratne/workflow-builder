@@ -14,6 +14,13 @@ export const useDiagram = () => {
     return diagrams;
   };
 
+  const getDiagramById = async (id: string) => {
+    setLoading(true);
+    const data = await diagramService().getDiagramById(id);
+    setLoading(false);
+    return data;
+  };
+
   const createDiagram = async (diagram: Omit<Diagram, 'createdBy' | 'id'>) => {
     setLoading(true);
     await diagramService().createNewDiagram({
@@ -23,11 +30,10 @@ export const useDiagram = () => {
     setLoading(false);
   };
 
-  const getDiagramById = async (id: string) => {
+  const updateDiagram = async (diagram: Diagram) => {
     setLoading(true);
-    const data = await diagramService().getDiagramById(id);
+    await diagramService().updateDiagram(diagram);
     setLoading(false);
-    return data;
   };
 
   const shareDiagram = async (diagramId: string, userId: string) => {
@@ -38,9 +44,10 @@ export const useDiagram = () => {
 
   return {
     loading,
-    createDiagram,
     getDiagrams,
     getDiagramById,
+    createDiagram,
+    updateDiagram,
     shareDiagram,
   };
 };

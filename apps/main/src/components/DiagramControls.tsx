@@ -4,11 +4,12 @@ import { Role, RoleGate } from '@shared/auth';
 import ShareDiagramDialog from '@/components/ShareDiagramDialog';
 
 interface DiagramControlsProps {
+  id?: string;
   name: string;
   onSave: () => void;
 }
 
-const DiagramControls = ({ name, onSave }: DiagramControlsProps) => {
+const DiagramControls = ({ id, name, onSave }: DiagramControlsProps) => {
   const shareDialogRef = useRef<{ open: () => void; close: () => void }>(null);
 
   return (
@@ -17,16 +18,20 @@ const DiagramControls = ({ name, onSave }: DiagramControlsProps) => {
 
       <RoleGate permissions={[Role.EDITOR]}>
         <Stack direction="row" spacing={1}>
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={() => {
-              shareDialogRef?.current?.open();
-            }}
-          >
-            Share
-          </Button>
-          <ShareDiagramDialog ref={shareDialogRef} />
+          {id && (
+            <>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => {
+                  shareDialogRef?.current?.open();
+                }}
+              >
+                Share
+              </Button>
+              <ShareDiagramDialog ref={shareDialogRef} />
+            </>
+          )}
           <Button variant="contained" color="primary" onClick={onSave}>
             Save
           </Button>

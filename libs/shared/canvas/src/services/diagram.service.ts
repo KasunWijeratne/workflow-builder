@@ -7,6 +7,7 @@ import {
   where,
   query,
   doc,
+  updateDoc,
 } from 'firebase/firestore';
 import { Diagram } from '../types/diagram.type';
 import { FirebaseError } from '@firebase/util';
@@ -36,6 +37,17 @@ const diagramService = () => {
     }
   };
 
+  const getDiagramById = async (id: string) => {
+    try {
+      const diagramDoc = doc(db, 'diagrams', id);
+      const diagram = await getDoc(diagramDoc);
+      return diagram.data();
+    } catch (error) {
+      console.error('Fetch diagram error:', (error as FirebaseError).code);
+      throw error;
+    }
+  };
+
   const createNewDiagram = async ({
     createdBy,
     nodes,
@@ -56,13 +68,16 @@ const diagramService = () => {
     }
   };
 
-  const getDiagramById = async (id: string) => {
+  const updateDiagram = async (diagram: Diagram) => {
     try {
-      const diagramDoc = doc(db, 'diagrams', id);
-      const diagram = await getDoc(diagramDoc);
-      return diagram.data();
+      const docRef = doc(db, 'diagrams', diagram.id);
+      await updateDoc(docRef, {
+        name: diagram.name,
+        nodes: diagram.nodes,
+        edges: diagram.edges,
+      });
     } catch (error) {
-      console.error('Fetch diagram error:', (error as FirebaseError).code);
+      console.error('Update diagram error:', (error as FirebaseError).code);
       throw error;
     }
   };
@@ -72,9 +87,10 @@ const diagramService = () => {
   };
 
   return {
-    createNewDiagram,
     getDiagrams,
     getDiagramById,
+    createNewDiagram,
+    updateDiagram,
     shareDiagram,
   };
 };

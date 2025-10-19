@@ -35,7 +35,7 @@ const ViewDiagram = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { screenToFlowPosition } = useReactFlow();
-  const { getDiagramById, createDiagram } = useDiagram();
+  const { getDiagramById, updateDiagram } = useDiagram();
   const { id } = useParams();
 
   //TODO: check if this can be moved into the canvas module
@@ -79,13 +79,15 @@ const ViewDiagram = () => {
     [nodes.length, screenToFlowPosition, setEdges, setNodes]
   );
 
-  const onSave = useCallback(() => {
-    createDiagram({
+  const onUpdate = useCallback(() => {
+    updateDiagram({
+      id: diagram.current?.id || '',
+      createdBy: diagram.current?.createdBy || '',
       name: diagram.current?.name || 'New Diagram',
       nodes: JSON.stringify(nodes),
       edges: JSON.stringify(edges),
     });
-  }, [createDiagram, nodes, edges]);
+  }, [updateDiagram, nodes, edges]);
 
   useEffect(() => {
     const fetchDiagram = async (id: string) => {
@@ -106,7 +108,11 @@ const ViewDiagram = () => {
   return (
     <TopbarWithFloatingControls
       controls={
-        <DiagramControls name={diagram.current?.name || ''} onSave={onSave} />
+        <DiagramControls
+          id={diagram.current?.id}
+          name={diagram.current?.name || ''}
+          onSave={onUpdate}
+        />
       }
     >
       <div style={{ width: '100%', height: '100%' }} ref={reactFlowWrapper}>

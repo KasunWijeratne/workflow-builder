@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useRef } from 'react';
-import { Button, Stack, TopbarWithFloatingControls } from '@shared/ui';
+import { useCallback, useRef } from 'react';
+import { TopbarWithFloatingControls } from '@shared/ui';
 import {
   Canvas,
   addEdge,
@@ -11,11 +11,13 @@ import {
   Connection,
   FinalConnectionState,
   useDiagram,
+  Diagram,
 } from '@shared/canvas';
 import {
   CustomLabelNode,
   nodeType as customLabelNodeType,
 } from '@shared/nodes-customlabel';
+import DiagramControls from '@/components/DiagramControls';
 
 const initialNodes = [
   {
@@ -35,6 +37,7 @@ const nodeOrigin: [number, number] = [0.5, 0];
 
 const NewDiagram = () => {
   const reactFlowWrapper = useRef(null);
+  const diagram = useRef<Diagram>(null);
 
   //TODO: check if this can be moved into the canvas module
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes);
@@ -42,27 +45,6 @@ const NewDiagram = () => {
   const { screenToFlowPosition } = useReactFlow();
 
   const { createDiagram } = useDiagram();
-
-  const controls = useMemo(() => {
-    return (
-      <Stack direction="row" spacing={2} justifyContent="space-between">
-        <h3>New Diagram</h3>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            createDiagram({
-              name: 'New Diagram',
-              nodes: JSON.stringify(nodes),
-              edges: JSON.stringify(edges),
-            });
-          }}
-        >
-          Save
-        </Button>
-      </Stack>
-    );
-  }, [createDiagram, edges, nodes]);
 
   //TODO: check if this can be moved into the canvas module
   const onConnect = useCallback(
@@ -105,8 +87,20 @@ const NewDiagram = () => {
     [nodes.length, screenToFlowPosition, setEdges, setNodes]
   );
 
+  const onSave = useCallback(() => {
+    createDiagram({
+      name: diagram.current?.name || 'New Diagram',
+      nodes: JSON.stringify(nodes),
+      edges: JSON.stringify(edges),
+    });
+  }, [createDiagram, nodes, edges]);
+
   return (
-    <TopbarWithFloatingControls controls={controls}>
+    <TopbarWithFloatingControls
+      controls={
+        <DiagramControls name={diagram.current?.name || ''} onSave={onSave} />
+      }
+    >
       <div style={{ width: '100%', height: '100%' }} ref={reactFlowWrapper}>
         <Canvas
           fitView
