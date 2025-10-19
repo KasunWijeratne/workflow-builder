@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box, IconButton, Input, DoneIcon, EditIcon } from '@shared/ui';
 import { Role, RoleGate } from '@shared/auth';
 import { Position, Handle, NodeProps, useReactFlow } from '@xyflow/react';
@@ -8,10 +8,9 @@ export const nodeType = 'customLabel';
 export const CustomLabelNode = (props: NodeProps) => {
   const [editable, setEditable] = useState(false);
   const labelInput = useRef<HTMLInputElement>(null);
+  const { updateNodeData } = useReactFlow();
 
   const label = props.data.label as string;
-
-  const { updateNodeData } = useReactFlow();
 
   const onLabelChange = () => {
     const newLabel = labelInput.current?.value;
@@ -20,6 +19,13 @@ export const CustomLabelNode = (props: NodeProps) => {
     }
     setEditable(false);
   };
+
+  useEffect(() => {
+    if (editable && labelInput.current) {
+      labelInput.current.value = label;
+      labelInput.current.focus();
+    }
+  }, [editable, label]);
 
   return (
     <Box sx={{ border: 'solid 1px', borderRadius: 1, py: 1, px: 2 }}>

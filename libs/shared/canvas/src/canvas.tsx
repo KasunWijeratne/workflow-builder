@@ -25,7 +25,6 @@ export const Canvas = (props: CanvasProps) => {
   const validProps = useMemo(
     () => ({
       ...props,
-      draggable: isAllowed([Role.EDITOR]),
       elementsSelectable: isAllowed([Role.EDITOR]),
       nodesDraggable: isAllowed([Role.EDITOR]),
     }),
