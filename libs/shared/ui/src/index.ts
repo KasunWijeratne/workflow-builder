@@ -11,6 +11,7 @@ export * from './components/Select';
 export * from './components/MenuItem';
 export * from './components/Box';
 export * from './components/Stack';
+export * from './components/Table';
 
 export const Chip = MUIChip;
 export const IconButton = MUIIconButton;
