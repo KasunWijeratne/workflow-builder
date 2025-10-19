@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Button, Stack, TopbarWithFloatingControls } from '@shared/ui';
+import { useCallback, useEffect, useRef } from 'react';
+import { TopbarWithFloatingControls } from '@shared/ui';
 import {
   Canvas,
   addEdge,
@@ -18,7 +18,7 @@ import {
   nodeType as customLabelNodeType,
 } from '@shared/nodes-customlabel';
 import { useParams } from 'react-router-dom';
-import ShareDiagramDialog from '@/components/ShareDiagramDialog';
+import DiagramControls from '@/components/DiagramControls';
 
 const nodeTypes = {
   [customLabelNodeType]: CustomLabelNode,
@@ -30,48 +30,13 @@ const nodeOrigin: [number, number] = [0.5, 0];
 const ViewDiagram = () => {
   const reactFlowWrapper = useRef(null);
   const diagram = useRef<Diagram>(null);
-  const shareDialogRef = useRef<{ open: () => void; close: () => void }>(null);
 
   //TODO: check if this can be moved into the canvas module
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { screenToFlowPosition } = useReactFlow();
-  const { createDiagram, getDiagramById } = useDiagram();
+  const { getDiagramById, createDiagram } = useDiagram();
   const { id } = useParams();
-
-  const controls = useMemo(() => {
-    return (
-      <Stack direction="row" spacing={2} justifyContent="space-between">
-        <h3>{diagram.current?.name}</h3>
-
-        <Stack direction="row" spacing={1}>
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={() => {
-              shareDialogRef?.current?.open();
-            }}
-          >
-            Share
-          </Button>
-          <ShareDiagramDialog ref={shareDialogRef} />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              createDiagram({
-                name: 'New Diagram',
-                nodes: JSON.stringify(nodes),
-                edges: JSON.stringify(edges),
-              });
-            }}
-          >
-            Save
-          </Button>
-        </Stack>
-      </Stack>
-    );
-  }, [createDiagram, edges, nodes]);
 
   //TODO: check if this can be moved into the canvas module
   const onConnect = useCallback(
@@ -114,6 +79,14 @@ const ViewDiagram = () => {
     [nodes.length, screenToFlowPosition, setEdges, setNodes]
   );
 
+  const onSave = useCallback(() => {
+    createDiagram({
+      name: diagram.current?.name || 'New Diagram',
+      nodes: JSON.stringify(nodes),
+      edges: JSON.stringify(edges),
+    });
+  }, [createDiagram, nodes, edges]);
+
   useEffect(() => {
     const fetchDiagram = async (id: string) => {
       const data = await getDiagramById(id);
@@ -131,7 +104,11 @@ const ViewDiagram = () => {
   }, [id]);
 
   return (
-    <TopbarWithFloatingControls controls={controls}>
+    <TopbarWithFloatingControls
+      controls={
+        <DiagramControls name={diagram.current?.name || ''} onSave={onSave} />
+      }
+    >
       <div style={{ width: '100%', height: '100%' }} ref={reactFlowWrapper}>
         <Canvas
           fitView
