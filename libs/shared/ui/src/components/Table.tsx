@@ -6,19 +6,21 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-interface TableProps {
-  rows: Array<{ [key: string]: number | string }>;
+interface TableProps<T extends { name: string }> {
+  rows: Array<T>;
   columns: Array<{
     header: string;
-    accessorKey: string;
+    accessorKey: keyof T;
     props?: { [key: string]: number | string };
   }>;
-  onRowClick?: (row: { [key: string]: number | string }) => void;
+  onRowClick?: (row: T) => void;
 }
 
-export const Table = ({ rows, columns, onRowClick }: TableProps) => {
-  console.log('columns', columns);
-  console.log('rows', rows);
+export const Table = <T extends { name: string }>({
+  rows,
+  columns,
+  onRowClick,
+}: TableProps<T>) => {
   return (
     <TableContainer component={Paper}>
       <MUITable sx={{ minWidth: 650 }} aria-label="simple table">
@@ -52,7 +54,7 @@ export const Table = ({ rows, columns, onRowClick }: TableProps) => {
                   component="th"
                   scope="row"
                 >
-                  {row[column.accessorKey]}
+                  {String(row[column.accessorKey])}
                 </TableCell>
               ))}
             </TableRow>
