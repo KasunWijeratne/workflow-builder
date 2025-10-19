@@ -4,6 +4,9 @@ import {
   signInWithEmailAndPassword,
   AuthError,
   User,
+  setPersistence,
+  browserSessionPersistence,
+  onAuthStateChanged,
 } from 'firebase/auth';
 import {
   addDoc,
@@ -14,11 +17,22 @@ import {
   query,
 } from 'firebase/firestore';
 import { app } from '../auth.config';
-import { Role } from '../types/user.type';
+import { Role, UserWithRoles } from '../types/user.type';
 
 const authService = () => {
   const auth = getAuth(app);
   const db = getFirestore();
+
+  const getUserWithRoles = async (user: User): Promise<UserWithRoles> => {
+    const usersCollection = collection(db, 'users');
+    const q = query(usersCollection, where('uid', '==', user.uid));
+    const querySnapshot = await getDocs(q);
+    const { roles } = querySnapshot.docs[0].data();
+    return {
+      user,
+      roles,
+    };
+  };
 
   const signIn = async (credentials: {
     email: string;
@@ -26,15 +40,9 @@ const authService = () => {
   }): Promise<{ user: User; roles: Role[] }> => {
     const { email, password } = credentials;
     try {
+      await setPersistence(auth, browserSessionPersistence);
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      const usersCollection = collection(db, 'users');
-      const q = query(usersCollection, where('uid', '==', user.uid));
-      const querySnapshot = await getDocs(q);
-      const { roles } = querySnapshot.docs[0].data();
-      return {
-        user,
-        roles,
-      };
+      return getUserWithRoles(user);
     } catch (error) {
       console.error('Login error:', (error as AuthError).code);
       throw error;
@@ -65,9 +73,17 @@ const authService = () => {
     }
   };
 
+  const checkUser = (callback: (user: UserWithRoles | null) => void) => {
+    return onAuthStateChanged(auth, async (user) => {
+      const userWithRoles = user ? await getUserWithRoles(user) : null;
+      callback(userWithRoles);
+    });
+  };
+
   return {
     signIn,
     signUp,
+    checkUser,
   };
 };
 

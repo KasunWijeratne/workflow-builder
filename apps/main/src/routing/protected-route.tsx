@@ -13,14 +13,14 @@ export const ProtectedRoute = ({
   permissions,
   fallbackPath = '/login',
 }: ProtectedRouteProps) => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const location = useLocation();
 
-  if (!user) {
+  if (!user && !loading) {
     return <Navigate to={fallbackPath} state={{ from: location }} replace />;
   }
 
-  if (permissions && permissions.length > 0) {
+  if (user && permissions && permissions.length > 0) {
     const isAllowed = user.roles.some((role) => permissions.includes(role));
 
     if (!isAllowed) {

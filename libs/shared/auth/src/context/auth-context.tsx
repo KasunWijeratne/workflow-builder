@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { Role, User } from '../types/user.type';
 import authService from '../services/auth.service';
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +34,7 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const login = async (
@@ -67,6 +73,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       throw error;
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = authService().checkUser((currentUser) => {
+      const { user, roles } = currentUser || {};
+      setUser(() => ({
+        id: user?.uid || '',
+        email: user?.email || '',
+        roles: roles || [],
+      }));
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <AuthContext.Provider
