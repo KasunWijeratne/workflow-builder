@@ -8,7 +8,7 @@ const RootRoute = () => {
 
   useEffect(() => {
     if (!user) {
-      // navigate('/login');
+      navigate('/login');
     }
   }, [navigate, user]);
 

@@ -17,6 +17,7 @@ export const IconButton = MUIIconButton;
 
 //Layouts
 export * from './layouts/topbar.layout';
+export * from './layouts/topbar-with-controls.layout';
 
 //Icons
 // export * from '@mui/icons-material';

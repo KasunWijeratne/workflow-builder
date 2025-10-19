@@ -1,5 +1,5 @@
-import { useCallback, useRef } from 'react';
-import { TopbarLayout } from '@shared/ui';
+import { useCallback, useMemo, useRef } from 'react';
+import { Button, Stack, TopbarWithFloatingControls } from '@shared/ui';
 import {
   Canvas,
   addEdge,
@@ -78,8 +78,19 @@ const NewDiagram = () => {
     [nodes.length, screenToFlowPosition, setEdges, setNodes]
   );
 
+  const controls = useMemo(() => {
+    return (
+      <Stack direction="row" spacing={2} justifyContent="space-between">
+        <h3>New Diagram</h3>
+        <Button variant="contained" color="primary">
+          Save
+        </Button>
+      </Stack>
+    );
+  }, []);
+
   return (
-    <TopbarLayout>
+    <TopbarWithFloatingControls controls={controls}>
       <div style={{ width: '100%', height: '100%' }} ref={reactFlowWrapper}>
         <Canvas
           fitView
@@ -95,7 +106,7 @@ const NewDiagram = () => {
           style={{ backgroundColor: '#eee' }}
         />
       </div>
-    </TopbarLayout>
+    </TopbarWithFloatingControls>
   );
 };
 
