@@ -11,12 +11,14 @@ import {
   Connection,
   FinalConnectionState,
   useDiagram,
+  Diagram,
 } from '@shared/canvas';
 import {
   CustomLabelNode,
   nodeType as customLabelNodeType,
 } from '@shared/nodes-customlabel';
 import { useParams } from 'react-router-dom';
+import ShareDiagramDialog from '@/components/ShareDiagramDialog';
 
 const nodeTypes = {
   [customLabelNodeType]: CustomLabelNode,
@@ -27,6 +29,8 @@ const nodeOrigin: [number, number] = [0.5, 0];
 
 const ViewDiagram = () => {
   const reactFlowWrapper = useRef(null);
+  const diagram = useRef<Diagram>(null);
+  const shareDialogRef = useRef<{ open: () => void; close: () => void }>(null);
 
   //TODO: check if this can be moved into the canvas module
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
@@ -38,20 +42,33 @@ const ViewDiagram = () => {
   const controls = useMemo(() => {
     return (
       <Stack direction="row" spacing={2} justifyContent="space-between">
-        <h3>New Diagram</h3>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            createDiagram({
-              name: 'New Diagram',
-              nodes: JSON.stringify(nodes),
-              edges: JSON.stringify(edges),
-            });
-          }}
-        >
-          Save
-        </Button>
+        <h3>{diagram.current?.name}</h3>
+
+        <Stack direction="row" spacing={1}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => {
+              shareDialogRef?.current?.open();
+            }}
+          >
+            Share
+          </Button>
+          <ShareDiagramDialog ref={shareDialogRef} />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              createDiagram({
+                name: 'New Diagram',
+                nodes: JSON.stringify(nodes),
+                edges: JSON.stringify(edges),
+              });
+            }}
+          >
+            Save
+          </Button>
+        </Stack>
       </Stack>
     );
   }, [createDiagram, edges, nodes]);
@@ -100,10 +117,12 @@ const ViewDiagram = () => {
   useEffect(() => {
     const fetchDiagram = async (id: string) => {
       const data = await getDiagramById(id);
-      const nodesData = data?.nodes ? JSON.parse(data.nodes) : [];
-      const edgesData = data?.edges ? JSON.parse(data.edges) : [];
+      const { name, nodes, edges, createdBy } = data || {};
+      const nodesData = nodes ? JSON.parse(nodes) : [];
+      const edgesData = edges ? JSON.parse(edges) : [];
       setNodes(nodesData);
       setEdges(edgesData);
+      diagram.current = { id, name, nodes, edges, createdBy };
     };
 
     if (id) {

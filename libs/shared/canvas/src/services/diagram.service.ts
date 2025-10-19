@@ -67,10 +67,15 @@ const diagramService = () => {
     }
   };
 
+  const shareDiagram = async (diagramId: string, userId: string) => {
+    //Share diagram
+  };
+
   return {
     createNewDiagram,
     getDiagrams,
     getDiagramById,
+    shareDiagram,
   };
 };
 

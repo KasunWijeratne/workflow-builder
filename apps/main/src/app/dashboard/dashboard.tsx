@@ -1,5 +1,6 @@
 import { TopbarLayout, Table } from '@shared/ui';
 import { Link, useNavigate } from 'react-router-dom';
+//TODO: move this to different module (diagramModule) so we dont have to load canvas at this point
 import { Diagram, useDiagram } from '@shared/canvas';
 import { useEffect, useState } from 'react';
 

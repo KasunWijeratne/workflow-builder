@@ -30,11 +30,18 @@ export const useDiagram = () => {
     return data;
   };
 
+  const shareDiagram = async (diagramId: string, userId: string) => {
+    setLoading(true);
+    await diagramService().shareDiagram(diagramId, userId);
+    setLoading(false);
+  };
+
   return {
     loading,
     createDiagram,
     getDiagrams,
     getDiagramById,
+    shareDiagram,
   };
 };
 

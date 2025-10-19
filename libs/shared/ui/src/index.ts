@@ -1,5 +1,8 @@
 import MUIChip from '@mui/material/Chip';
+import MUIDialog from '@mui/material/Dialog';
 import MUIIconButton from '@mui/material/IconButton';
+import MUIAutocomplete from '@mui/material/Autocomplete';
+
 import EditOutlined from '@mui/icons-material/EditOutlined';
 import DoneOutlined from '@mui/icons-material/DoneOutlined';
 
@@ -14,7 +17,9 @@ export * from './components/Stack';
 export * from './components/Table';
 
 export const Chip = MUIChip;
+export const Dialog = MUIDialog;
 export const IconButton = MUIIconButton;
+export const Autocomplete = MUIAutocomplete;
 
 //Layouts
 export * from './layouts/topbar.layout';

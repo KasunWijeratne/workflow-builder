@@ -56,6 +56,7 @@ const authService = () => {
       const usersCollection = collection(db, 'users');
       await addDoc(usersCollection, {
         roles,
+        email,
         uid: user.uid,
       });
     } catch (error) {
