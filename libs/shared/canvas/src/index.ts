@@ -14,3 +14,9 @@ export {
   type Connection,
   type FinalConnectionState,
 } from '@xyflow/react';
+
+//Types
+export * from './types/diagram.type';
+
+//Hooks
+export * from './hooks/useDiagram';

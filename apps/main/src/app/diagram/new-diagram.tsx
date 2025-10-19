@@ -10,6 +10,7 @@ import {
   Node,
   Connection,
   FinalConnectionState,
+  useDiagram,
 } from '@shared/canvas';
 import {
   CustomLabelNode,
@@ -35,15 +36,41 @@ const nodeOrigin: [number, number] = [0.5, 0];
 const NewDiagram = () => {
   const reactFlowWrapper = useRef(null);
 
+  //TODO: check if this can be moved into the canvas module
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { screenToFlowPosition } = useReactFlow();
 
+  const { createDiagram } = useDiagram();
+
+  const controls = useMemo(() => {
+    return (
+      <Stack direction="row" spacing={2} justifyContent="space-between">
+        <h3>New Diagram</h3>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            createDiagram({
+              name: 'New Diagram',
+              nodes: JSON.stringify(nodes),
+              edges: JSON.stringify(edges),
+            });
+          }}
+        >
+          Save
+        </Button>
+      </Stack>
+    );
+  }, [createDiagram, edges, nodes]);
+
+  //TODO: check if this can be moved into the canvas module
   const onConnect = useCallback(
     (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
 
+  //TODO: check if this can be moved into the canvas module
   const onConnectEnd = useCallback(
     (event: MouseEvent | TouchEvent, connectionState: FinalConnectionState) => {
       // when a connection is dropped on the pane it's not valid
@@ -77,17 +104,6 @@ const NewDiagram = () => {
     },
     [nodes.length, screenToFlowPosition, setEdges, setNodes]
   );
-
-  const controls = useMemo(() => {
-    return (
-      <Stack direction="row" spacing={2} justifyContent="space-between">
-        <h3>New Diagram</h3>
-        <Button variant="contained" color="primary">
-          Save
-        </Button>
-      </Stack>
-    );
-  }, []);
 
   return (
     <TopbarWithFloatingControls controls={controls}>
