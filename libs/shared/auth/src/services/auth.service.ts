@@ -2,7 +2,6 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  AuthError,
   User,
   setPersistence,
   browserSessionPersistence,

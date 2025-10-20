@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           email: res.user.email || '',
           roles: res.roles,
         }));
-        window.location.assign(successRedirect);
+        // window.location.assign(successRedirect);
       }
     } catch (error) {
       const code = (error as AuthError).code;

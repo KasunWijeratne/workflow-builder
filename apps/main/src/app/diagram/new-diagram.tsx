@@ -18,6 +18,7 @@ import {
 } from '@shared/nodes-customlabel';
 import DiagramControls from '@/components/DiagramControls';
 import DiagramName from '@/components/DiagramName';
+import { useAuth } from '@shared/auth';
 
 const initialNodes = [
   {
@@ -44,7 +45,8 @@ const NewDiagram = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { screenToFlowPosition } = useReactFlow();
 
-  const { createDiagram, loading } = useDiagram();
+  const { user } = useAuth();
+  const { createDiagram, loading } = useDiagram(user);
 
   //TODO: check if this can be moved into the canvas module
   const onConnect = useCallback(

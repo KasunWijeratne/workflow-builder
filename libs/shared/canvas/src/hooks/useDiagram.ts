@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import diagramService from '../services/diagram.service';
 import { Diagram } from '../types/diagram.type';
-import { useAuth } from '@shared/auth';
+import { User } from '@shared/auth';
 import { useNavigate } from 'react-router-dom';
 import { FirebaseError } from '@firebase/util';
 import { useNotification } from '@shared/ui';
 
-export const useDiagram = () => {
+export const useDiagram = (user: User | null) => {
   const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
   const navigate = useNavigate();
   const { addNotification } = useNotification();
 

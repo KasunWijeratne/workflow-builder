@@ -20,6 +20,7 @@ import {
 import { useParams } from 'react-router-dom';
 import DiagramControls from '@/components/DiagramControls';
 import DiagramName from '@/components/DiagramName';
+import { useAuth } from '@shared/auth';
 
 const nodeTypes = {
   [customLabelNodeType]: CustomLabelNode,
@@ -36,7 +37,8 @@ const ViewDiagram = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { screenToFlowPosition } = useReactFlow();
-  const { getDiagramById, updateDiagram, loading } = useDiagram();
+  const { user } = useAuth();
+  const { getDiagramById, updateDiagram, loading } = useDiagram(user);
   const { id } = useParams();
 
   //TODO: check if this can be moved into the canvas module

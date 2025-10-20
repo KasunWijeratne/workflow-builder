@@ -29,7 +29,7 @@ const ShareDiagramDialog = forwardRef(
     const { user } = useAuth();
 
     const { getUsers } = useUsers();
-    const { shareDiagram, loading } = useDiagram();
+    const { shareDiagram, loading } = useDiagram(user);
 
     useImperativeHandle(ref, () => ({
       close: () => setOpen(false),

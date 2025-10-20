@@ -12,9 +12,9 @@ interface DiagramColumn {
 
 const Dashboard = () => {
   const [diagrams, setDiagrams] = useState<Diagram[]>([]);
-  const { getDiagrams, loading } = useDiagram();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { getDiagrams, loading } = useDiagram(user);
 
   const onRowClick = (row: Diagram) => {
     navigate(`/diagram/${row.id}`);
@@ -26,8 +26,10 @@ const Dashboard = () => {
       setDiagrams(data || []);
     };
 
-    fetchDiagrams();
-  }, []);
+    if (user?.id) {
+      fetchDiagrams();
+    }
+  }, [user?.id]);
 
   return (
     <>
@@ -59,7 +61,11 @@ const Dashboard = () => {
         </RoleGate>
       </Box>
 
-      <Box mt={4} p={4}>
+      <Box
+        mt={4}
+        p={4}
+        sx={{ width: '100%', maxWidth: 1200, margin: '0 auto' }}
+      >
         <Typography variant="h4" mb={2}>
           Your Diagrams
         </Typography>
@@ -76,6 +82,7 @@ const Dashboard = () => {
 const columns: DiagramColumn[] = [
   { header: 'Name', accessorKey: 'name' },
   { header: 'Created By', accessorKey: 'createdBy' },
+  { header: 'Ownership', accessorKey: 'shared' },
 ];
 
 export default Dashboard;
