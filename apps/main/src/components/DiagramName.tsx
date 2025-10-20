@@ -44,7 +44,7 @@ const DiagramName = ({ name, disabled, onChange }: DiagramNameProps) => {
           />
           <IconButton
             size="small"
-            sx={{ color: 'secondary.main' }}
+            sx={{ color: 'secondary.main', mr: -1 }}
             onClick={onUpdate}
           >
             <DoneIcon fontSize="small" />

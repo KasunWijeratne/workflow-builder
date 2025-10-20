@@ -9,7 +9,7 @@ const wrapperSX = {
   height: 20,
   p: '1px',
 };
-const iconSX = { color: 'primary.main', fontSize: 18 };
+const iconSX = { color: 'secondary.main', fontSize: 18 };
 
 const ThemeSwitcher = ({ mode, setMode }: ThemeContextType) => {
   return (
