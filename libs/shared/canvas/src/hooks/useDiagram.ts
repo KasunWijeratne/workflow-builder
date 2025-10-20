@@ -47,6 +47,7 @@ export const useDiagram = () => {
         ...diagram,
         createdBy: user?.id || '',
       });
+      addNotification(`Diagram created successfully`, 'success');
     } catch (error) {
       const code = (error as FirebaseError).code;
       addNotification(`Failed to create diagram: ${code}`, 'error');
@@ -59,6 +60,7 @@ export const useDiagram = () => {
     try {
       setLoading(true);
       await diagramService().updateDiagram(diagram);
+      addNotification(`Diagram updated successfully`, 'success');
     } catch (error) {
       const code = (error as FirebaseError).code;
       addNotification(`Failed to update diagram: ${code}`, 'error');
@@ -71,6 +73,7 @@ export const useDiagram = () => {
     try {
       setLoading(true);
       await diagramService().deleteDiagram(diagramId);
+      addNotification(`Diagram deleted successfully`, 'success');
       navigate('/dashboard');
     } catch (error) {
       const code = (error as FirebaseError).code;
@@ -84,6 +87,7 @@ export const useDiagram = () => {
     try {
       setLoading(true);
       await diagramService().shareDiagram(diagramId, userId);
+      addNotification(`Diagram successfully shared with ${userId}`, 'success');
     } catch (error) {
       const code = (error as FirebaseError).code;
       addNotification(`Failed to share diagram: ${code}`, 'error');
