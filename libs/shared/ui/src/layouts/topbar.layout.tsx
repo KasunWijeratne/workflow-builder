@@ -22,17 +22,20 @@ export const TopbarLayout: FC<TopbarLayoutProps> = ({ children, userMenu }) => {
           borderBottomColor: 'border.main',
         }}
       >
-        <Typography variant="h2" style={{ margin: 0, fontSize: '2rem' }}>
-          <Link to={'/dashboard'} style={{ textDecoration: 'none' }}>
+        <Typography
+          variant="h2"
+          style={{ margin: 0, fontSize: '1.25rem', fontWeight: 600 }}
+        >
+          <Link
+            to={'/dashboard'}
+            style={{ textDecoration: 'none', color: 'black' }}
+          >
             Diagram Builder
           </Link>
         </Typography>
         {userMenu && userMenu}
       </Stack>
-      <Box
-        flex={1}
-        sx={{ p: 2, width: '100%', maxWidth: 1500, margin: '0 auto' }}
-      >
+      <Box flex={1} sx={{ width: '100%', maxWidth: 1500, margin: '0 auto' }}>
         {children}
       </Box>
     </Stack>

@@ -20,6 +20,15 @@ const lightTheme = createTheme({
   cssVariables: true,
   typography: {
     fontSize: 14,
+    h2: {
+      fontSize: '2rem',
+    },
+    h3: {
+      fontSize: '1.5rem',
+    },
+    h4: {
+      fontSize: '1.25rem',
+    },
   },
   palette: {
     primary: {
@@ -36,6 +45,10 @@ const lightTheme = createTheme({
       main: grey[300],
       light: grey[100],
       dark: grey[500],
+    },
+    text: {
+      primary: '#000000',
+      secondary: grey[700],
     },
   },
   components: {
@@ -67,6 +80,16 @@ const lightTheme = createTheme({
         root: {
           marginTop: 0,
           marginBottom: '8px',
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          borderBottom: `none`,
+        },
+        head: {
+          color: grey[700],
         },
       },
     },

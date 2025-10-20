@@ -1,9 +1,10 @@
-import { TopbarLayout, Table } from '@shared/ui';
+import { TopbarLayout, Table, Box, Typography, Button } from '@shared/ui';
 import { Link, useNavigate } from 'react-router-dom';
 //TODO: move this to different module (diagramModule) so we dont have to load canvas at this point
 import { Diagram, useDiagram } from '@shared/canvas';
 import { useEffect, useState } from 'react';
 import UserMenu from '@/components/UserMenu';
+import { useAuth } from '@shared/auth';
 
 interface DiagramColumn {
   header: string;
@@ -14,6 +15,7 @@ const Dashboard = () => {
   const [diagrams, setDiagrams] = useState<Diagram[]>([]);
   const { getDiagrams, loading } = useDiagram();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const onRowClick = (row: Diagram) => {
     navigate(`/diagram/${row.id}`);
@@ -30,9 +32,42 @@ const Dashboard = () => {
 
   return (
     <TopbarLayout userMenu={<UserMenu />}>
-      <Link to={'/diagram/new'}>Diagram</Link>
-      {loading ? <div>Loading...</div> : null}
-      <Table columns={columns} rows={diagrams} onRowClick={onRowClick} />
+      <Box
+        p={4}
+        textAlign="center"
+        sx={{ background: 'linear-gradient(0deg, white, #e5e9ff)' }}
+      >
+        <Typography variant="h2" mb={4}>
+          Hello,{' '}
+          <Typography
+            variant="h2"
+            component="span"
+            color="primary.main"
+            fontWeight="600"
+          >
+            {user?.email} 👋
+          </Typography>{' '}
+          Welcome!
+        </Typography>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => navigate('/diagram/new')}
+        >
+          Create New Diagram
+        </Button>
+      </Box>
+
+      <Box mt={4} p={4}>
+        <Typography variant="h4" mb={2}>
+          Your Diagrams
+        </Typography>
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          <Table columns={columns} rows={diagrams} onRowClick={onRowClick} />
+        )}
+      </Box>
     </TopbarLayout>
   );
 };
