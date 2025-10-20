@@ -1,5 +1,14 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import { Dialog, Box, Input, Autocomplete, Stack, Button } from '@shared/ui';
+import {
+  Dialog,
+  Input,
+  Autocomplete,
+  Stack,
+  Button,
+  Typography,
+  SendIcon,
+  ShareIcon,
+} from '@shared/ui';
 import { useAuth, useUsers } from '@shared/auth';
 import { useDiagram } from '@shared/canvas';
 
@@ -58,29 +67,56 @@ const ShareDiagramDialog = forwardRef(
 
     return (
       <Dialog onClose={handleClose} open={open}>
-        <Box sx={{ padding: 2, width: 400 }}>
-          <h2>Share Diagram</h2>
-          <Autocomplete
-            disablePortal
-            value={shareInfo}
-            options={users || []}
-            sx={{ width: 300, height: 300 }}
-            onChange={(_, item) => {
-              setShareInfo(item);
-            }}
-            renderInput={(params) => (
-              <Input {...params} placeholder="Share with.." />
-            )}
-          />
+        <Stack
+          direction={'column'}
+          justifyContent={'space-between'}
+          sx={{ padding: 2, width: 420, height: 300 }}
+        >
+          <div>
+            <Stack direction={'row'} alignItems={'center'} gap={1} mb={5}>
+              <Stack
+                alignItems={'center'}
+                justifyContent={'center'}
+                sx={{
+                  borderRadius: '50%',
+                  height: 25,
+                  width: 25,
+                  backgroundColor: 'secondary.light',
+                }}
+              >
+                <ShareIcon sx={{ fontSize: 15, color: 'white' }} />
+              </Stack>
+              <Typography variant="h3">Share diagram</Typography>
+            </Stack>
+            <Typography variant="body1" color="text.secondary" mb={1}>
+              Type and select an email to share this diagram with..
+            </Typography>
+            <Autocomplete
+              disablePortal
+              value={shareInfo}
+              options={users || []}
+              onChange={(_, item) => {
+                setShareInfo(item);
+              }}
+              renderInput={(params) => (
+                <Input {...params} placeholder="Email" />
+              )}
+            />
+          </div>
           <Stack direction="row" spacing={2} justifyContent="flex-end">
             <Button variant="text" color="secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant="contained" color="primary" onClick={handleShare}>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<SendIcon />}
+              onClick={handleShare}
+            >
               Share
             </Button>
           </Stack>
-        </Box>
+        </Stack>
       </Dialog>
     );
   }

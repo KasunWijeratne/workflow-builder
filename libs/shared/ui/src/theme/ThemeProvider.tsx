@@ -48,7 +48,7 @@ const lightTheme = createTheme({
     },
     text: {
       primary: '#000000',
-      secondary: grey[700],
+      secondary: grey[600],
     },
   },
   components: {
@@ -60,6 +60,19 @@ const lightTheme = createTheme({
             WebkitBoxShadow: '0 0 0 1000px #ffeeffff inset',
             WebkitTextFillColor: '#000000',
           },
+        },
+      },
+    },
+    MuiAutocomplete: {
+      styleOverrides: {
+        root: {
+          '.MuiInputBase-root': {
+            paddingTop: 0,
+            paddingBottom: 0,
+          },
+        },
+        input: {
+          paddingLeft: 2,
         },
       },
     },
