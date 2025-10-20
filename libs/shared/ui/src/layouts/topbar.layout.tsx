@@ -24,7 +24,7 @@ export const TopbarLayout: FC<TopbarLayoutProps> = ({ children, userMenu }) => {
       >
         <Typography
           variant="h2"
-          style={{ margin: 0, fontSize: '1.25rem', fontWeight: 600 }}
+          style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}
         >
           <Link
             to={'/dashboard'}

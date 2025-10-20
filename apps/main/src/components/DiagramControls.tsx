@@ -31,10 +31,16 @@ const DiagramControls = ({ id, name, onSave }: DiagramControlsProps) => {
       <h3>{name}</h3>
 
       <RoleGate permissions={[Role.EDITOR]}>
-        <Stack direction="row" alignItems={'center'} spacing={1}>
+        <Stack
+          direction="row"
+          alignItems={'center'}
+          spacing={1}
+          sx={{ background: 'white', borderRadius: 5, pr: 1, pl: 2 }}
+        >
           {id && (
             <>
               <Button
+                size="small"
                 variant="outlined"
                 color="secondary"
                 startIcon={<ShareIcon />}
@@ -48,6 +54,7 @@ const DiagramControls = ({ id, name, onSave }: DiagramControlsProps) => {
             </>
           )}
           <Button
+            size="small"
             variant="contained"
             color="primary"
             startIcon={<SaveIcon />}

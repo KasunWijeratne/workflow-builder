@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { TopbarWithFloatingControls } from '@shared/ui';
 import {
   Canvas,
@@ -19,6 +19,8 @@ import {
 } from '@shared/nodes-customlabel';
 import { useParams } from 'react-router-dom';
 import DiagramControls from '@/components/DiagramControls';
+import UserMenu from '@/components/UserMenu';
+import DiagramName from '@/components/DiagramName';
 
 const nodeTypes = {
   [customLabelNodeType]: CustomLabelNode,
@@ -29,7 +31,7 @@ const nodeOrigin: [number, number] = [0.5, 0];
 
 const ViewDiagram = () => {
   const reactFlowWrapper = useRef(null);
-  const diagram = useRef<Diagram>(null);
+  const [diagram, setDiagram] = useState<Diagram>();
 
   //TODO: check if this can be moved into the canvas module
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
@@ -81,13 +83,20 @@ const ViewDiagram = () => {
 
   const onUpdate = useCallback(() => {
     updateDiagram({
-      id: diagram.current?.id || '',
-      createdBy: diagram.current?.createdBy || '',
-      name: diagram.current?.name || 'New Diagram',
+      id: diagram?.id || '',
+      createdBy: diagram?.createdBy || '',
+      name: diagram?.name || 'Untitled Diagram',
       nodes: JSON.stringify(nodes),
       edges: JSON.stringify(edges),
     });
-  }, [updateDiagram, nodes, edges]);
+  }, [
+    updateDiagram,
+    diagram?.id,
+    diagram?.createdBy,
+    diagram?.name,
+    nodes,
+    edges,
+  ]);
 
   useEffect(() => {
     const fetchDiagram = async (id: string) => {
@@ -97,7 +106,7 @@ const ViewDiagram = () => {
       const edgesData = edges ? JSON.parse(edges) : [];
       setNodes(nodesData);
       setEdges(edgesData);
-      diagram.current = { id, name, nodes, edges, createdBy };
+      setDiagram({ id, name, nodes, edges, createdBy });
     };
 
     if (id) {
@@ -109,11 +118,19 @@ const ViewDiagram = () => {
     <TopbarWithFloatingControls
       controls={
         <DiagramControls
-          id={diagram.current?.id}
-          name={diagram.current?.name || ''}
+          id={diagram?.id}
+          name={
+            <DiagramName
+              name={diagram?.name || ''}
+              onChange={(name) => {
+                setDiagram((s) => (s ? { ...s, name } : diagram));
+              }}
+            />
+          }
           onSave={onUpdate}
         />
       }
+      userMenu={<UserMenu />}
     >
       <div style={{ width: '100%', height: '100%' }} ref={reactFlowWrapper}>
         <Canvas
