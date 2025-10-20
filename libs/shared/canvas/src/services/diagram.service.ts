@@ -10,7 +10,7 @@ import {
   updateDoc,
   deleteDoc,
 } from 'firebase/firestore';
-import { Diagram } from '../types/diagram.type';
+import { Diagram, Ownership } from '../types/diagram.type';
 import { FirebaseError } from '@firebase/util';
 
 const diagramService = () => {
@@ -34,7 +34,7 @@ const diagramService = () => {
       ]);
 
       const data = querySnapshot.flatMap((snapshot) => {
-        return snapshot.docs.map((doc) => {
+        return snapshot.docs.map((doc, i) => {
           const data = doc.data();
           return {
             id: doc.id,
@@ -42,6 +42,7 @@ const diagramService = () => {
             name: data.name,
             nodes: data.nodes,
             edges: data.edges,
+            shared: i === 1 ? Ownership.Shared : Ownership.Created,
           };
         });
       });

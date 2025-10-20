@@ -6,13 +6,11 @@ import {
   FC,
   PropsWithChildren,
 } from 'react';
-import { Box, Card, Snackbar, Stack, Typography } from '@mui/material';
+import { Card, Snackbar, Stack, Typography } from '@mui/material';
 import {
   CheckCircleOutline,
   CircleNotificationsOutlined,
   ErrorOutlineOutlined,
-  NotificationsNoneOutlined,
-  WarningAmberOutlined,
 } from '@mui/icons-material';
 
 type Severity = 'info' | 'error' | 'success';
