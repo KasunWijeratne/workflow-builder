@@ -8,6 +8,8 @@ import MUITypography from '@mui/material/Typography';
 import EditOutlined from '@mui/icons-material/EditOutlined';
 import DoneOutlined from '@mui/icons-material/DoneOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Save from '@mui/icons-material/Save';
+import Share from '@mui/icons-material/Share';
 
 //Theme
 export * from './theme/ThemeProvider';
@@ -38,3 +40,5 @@ export * from './layouts/topbar-with-controls.layout';
 export const EditIcon = EditOutlined;
 export const DoneIcon = DoneOutlined;
 export const MoreIcon = MoreVertIcon;
+export const SaveIcon = Save;
+export const ShareIcon = Share;

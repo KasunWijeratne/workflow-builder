@@ -1,10 +1,12 @@
-import { useRef, useState } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import {
   Button,
   IconButton,
   Menu,
   MenuItem,
   MoreIcon,
+  SaveIcon,
+  ShareIcon,
   Stack,
 } from '@shared/ui';
 import { Role, RoleGate } from '@shared/auth';
@@ -13,7 +15,7 @@ import { useDiagram } from '@shared/canvas';
 
 interface DiagramControlsProps {
   id?: string;
-  name: string;
+  name: ReactNode;
   onSave: () => void;
 }
 
@@ -29,12 +31,13 @@ const DiagramControls = ({ id, name, onSave }: DiagramControlsProps) => {
       <h3>{name}</h3>
 
       <RoleGate permissions={[Role.EDITOR]}>
-        <Stack direction="row" spacing={1}>
+        <Stack direction="row" alignItems={'center'} spacing={1}>
           {id && (
             <>
               <Button
                 variant="outlined"
                 color="secondary"
+                startIcon={<ShareIcon />}
                 onClick={() => {
                   shareDialogRef?.current?.open();
                 }}
@@ -44,7 +47,12 @@ const DiagramControls = ({ id, name, onSave }: DiagramControlsProps) => {
               <ShareDiagramDialog id={id} ref={shareDialogRef} />
             </>
           )}
-          <Button variant="contained" color="primary" onClick={onSave}>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<SaveIcon />}
+            onClick={onSave}
+          >
             Save
           </Button>
           {id && <DiagramMoreControls id={id} />}

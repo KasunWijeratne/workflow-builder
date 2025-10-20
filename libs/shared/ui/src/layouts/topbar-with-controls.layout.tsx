@@ -19,21 +19,19 @@ export const TopbarWithFloatingControls: FC<
           position: 'relative',
         }}
       >
-        {controls && (
-          <Box
-            sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              zIndex: 1,
-              p: 2,
-              width: '100%',
-              boxSizing: 'border-box',
-            }}
-          >
-            {controls}
-          </Box>
-        )}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            zIndex: 1,
+            p: 2,
+            width: '100%',
+            boxSizing: 'border-box',
+          }}
+        >
+          {controls}
+        </Box>
         {children}
       </Box>
     </TopbarLayout>

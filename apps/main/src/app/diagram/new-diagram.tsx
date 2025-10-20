@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { TopbarWithFloatingControls } from '@shared/ui';
 import {
   Canvas,
@@ -11,13 +11,14 @@ import {
   Connection,
   FinalConnectionState,
   useDiagram,
-  Diagram,
 } from '@shared/canvas';
 import {
   CustomLabelNode,
   nodeType as customLabelNodeType,
 } from '@shared/nodes-customlabel';
 import DiagramControls from '@/components/DiagramControls';
+import DiagramName from '@/components/DiagramName';
+import UserMenu from '@/components/UserMenu';
 
 const initialNodes = [
   {
@@ -37,7 +38,7 @@ const nodeOrigin: [number, number] = [0.5, 0];
 
 const NewDiagram = () => {
   const reactFlowWrapper = useRef(null);
-  const diagram = useRef<Diagram>(null);
+  const [diagramName, setDiagramName] = useState<string>('New Diagram');
 
   //TODO: check if this can be moved into the canvas module
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes);
@@ -89,17 +90,21 @@ const NewDiagram = () => {
 
   const onSave = useCallback(() => {
     createDiagram({
-      name: diagram.current?.name || 'New Diagram',
+      name: diagramName,
       nodes: JSON.stringify(nodes),
       edges: JSON.stringify(edges),
     });
-  }, [createDiagram, nodes, edges]);
+  }, [createDiagram, diagramName, nodes, edges]);
 
   return (
     <TopbarWithFloatingControls
       controls={
-        <DiagramControls name={diagram.current?.name || ''} onSave={onSave} />
+        <DiagramControls
+          name={<DiagramName name={diagramName} onChange={setDiagramName} />}
+          onSave={onSave}
+        />
       }
+      userMenu={<UserMenu />}
     >
       <div style={{ width: '100%', height: '100%' }} ref={reactFlowWrapper}>
         <Canvas
