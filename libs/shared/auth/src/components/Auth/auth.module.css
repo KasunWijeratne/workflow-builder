@@ -7,7 +7,10 @@
 }
 
 .container {
-  height: 400px;
+  height: 300px;
   width: 400px;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

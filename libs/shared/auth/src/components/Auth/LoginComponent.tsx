@@ -1,7 +1,9 @@
-import { useRef } from 'react';
-import { Button, Card, Input } from '@shared/ui';
+import { FormEvent, useRef } from 'react';
+import { Box, Button, Card, Input, Typography } from '@shared/ui';
 import { useAuth } from '../../context/auth-context';
 import styles from './auth.module.css';
+import { Link } from 'react-router-dom';
+import AuthFooter from './Footer';
 
 export const LoginComponent = () => {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -9,7 +11,8 @@ export const LoginComponent = () => {
 
   const { login, loading } = useAuth();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: FormEvent) => {
+    e.preventDefault();
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
 
@@ -19,32 +22,39 @@ export const LoginComponent = () => {
   };
 
   return (
-    <div className={styles.layout__login}>
+    <Box
+      component="form"
+      className={styles.layout__login}
+      onSubmit={handleLogin}
+    >
       <Card className={styles.container}>
-        <Input
-          fullWidth
-          inputRef={emailRef}
-          placeholder="Email"
-          margin="normal"
-        />
-        <Input
-          fullWidth
-          inputRef={passwordRef}
-          placeholder="password"
-          type="password"
-          margin="normal"
-        />
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
+        <Box>
+          <Input
+            fullWidth
+            required
+            inputRef={emailRef}
+            placeholder="Email"
+            margin="normal"
+          />
+          <Input
+            fullWidth
+            required
+            inputRef={passwordRef}
+            placeholder="password"
+            type="password"
+            margin="normal"
+          />
+        </Box>
+        <AuthFooter
           loading={loading}
-          onClick={handleLogin}
-        >
-          Login
-        </Button>
+          link={
+            <>
+              Don't have an account? <Link to="/signup">Sign up</Link>
+            </>
+          }
+        />
       </Card>
-    </div>
+    </Box>
   );
 };
 

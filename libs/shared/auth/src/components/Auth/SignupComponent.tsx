@@ -1,8 +1,10 @@
-import { useRef, useState } from 'react';
-import { Button, Card, Input, Select, MenuItem, Chip } from '@shared/ui';
+import { FormEvent, useRef, useState } from 'react';
+import { Card, Input, Select, MenuItem, Chip, Box } from '@shared/ui';
 import { useAuth } from '../../context/auth-context';
 import { Role } from '../../types/user.type';
 import styles from './auth.module.css';
+import { Link } from 'react-router-dom';
+import AuthFooter from './Footer';
 
 export const SignupComponent = () => {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -11,7 +13,8 @@ export const SignupComponent = () => {
 
   const { signUp, loading } = useAuth();
 
-  const handleSignup = async () => {
+  const handleSignup = async (e: FormEvent) => {
+    e.preventDefault();
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
 
@@ -21,55 +24,63 @@ export const SignupComponent = () => {
   };
 
   return (
-    <div className={styles.layout__login}>
+    <Box
+      component="form"
+      className={styles.layout__login}
+      onSubmit={handleSignup}
+    >
       <Card className={styles.container}>
-        <Input
-          fullWidth
-          inputRef={emailRef}
-          placeholder="Email"
-          margin="normal"
-        />
-        <Input
-          fullWidth
-          inputRef={passwordRef}
-          placeholder="password"
-          type="password"
-          margin="normal"
-        />
-        <Select
-          fullWidth
-          multiple
-          value={roles}
-          onChange={(event) => {
-            const {
-              target: { value },
-            } = event;
-            setRoles(
-              typeof value === 'string' ? (value.split(',') as Role[]) : value
-            );
-          }}
-          renderValue={(selected: Role[]) => (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </div>
-          )}
-        >
-          <MenuItem value={Role.VIEWER}>{Role.VIEWER}</MenuItem>
-          <MenuItem value={Role.EDITOR}>{Role.EDITOR}</MenuItem>
-        </Select>
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
+        <Box>
+          <Input
+            fullWidth
+            required
+            inputRef={emailRef}
+            placeholder="Email"
+            margin="normal"
+          />
+          <Input
+            fullWidth
+            required
+            inputRef={passwordRef}
+            placeholder="password"
+            type="password"
+            margin="normal"
+          />
+          <Select
+            fullWidth
+            multiple
+            required
+            value={roles}
+            onChange={(event) => {
+              const {
+                target: { value },
+              } = event;
+              setRoles(
+                typeof value === 'string' ? (value.split(',') as Role[]) : value
+              );
+            }}
+            renderValue={(selected: Role[]) => (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                {selected.map((value) => (
+                  <Chip key={value} label={value} />
+                ))}
+              </div>
+            )}
+          >
+            <MenuItem value={Role.VIEWER}>{Role.VIEWER}</MenuItem>
+            <MenuItem value={Role.EDITOR}>{Role.EDITOR}</MenuItem>
+          </Select>
+        </Box>
+        <AuthFooter
           loading={loading}
-          onClick={handleSignup}
-        >
-          Sign Up
-        </Button>
+          link={
+            <>
+              Already have an account? <Link to="/login">Login</Link>
+            </>
+          }
+        />
       </Card>
-    </div>
+    </Box>
   );
 };
 
