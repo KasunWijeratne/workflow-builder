@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-interface TableProps<T extends { name: string }> {
+interface TableProps<T extends { id: string; name: string }> {
   rows: Array<T>;
   columns: Array<{
     header: string;
@@ -16,7 +16,7 @@ interface TableProps<T extends { name: string }> {
   onRowClick?: (row: T) => void;
 }
 
-export const Table = <T extends { name: string }>({
+export const Table = <T extends { id: string; name: string }>({
   rows,
   columns,
   onRowClick,
@@ -36,7 +36,7 @@ export const Table = <T extends { name: string }>({
         <TableBody>
           {rows.map((row) => (
             <TableRow
-              key={row.name}
+              key={row.id}
               sx={{
                 '&:hover': {
                   backgroundColor: '#f5f5f5',

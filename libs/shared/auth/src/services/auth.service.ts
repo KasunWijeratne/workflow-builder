@@ -23,21 +23,26 @@ const authService = () => {
   const auth = getAuth(app);
   const db = getFirestore();
 
-  const getUserWithRoles = async (user: User): Promise<UserWithRoles> => {
+  const getUserWithRoles = async (
+    user: User
+  ): Promise<UserWithRoles | null> => {
     const usersCollection = collection(db, 'users');
     const q = query(usersCollection, where('uid', '==', user.uid));
     const querySnapshot = await getDocs(q);
-    const { roles } = querySnapshot.docs[0].data();
-    return {
-      user,
-      roles,
-    };
+    if (querySnapshot.docs[0]) {
+      const { roles } = querySnapshot.docs[0].data();
+      return {
+        user,
+        roles,
+      };
+    }
+    return null;
   };
 
   const signIn = async (credentials: {
     email: string;
     password: string;
-  }): Promise<{ user: User; roles: Role[] }> => {
+  }): Promise<{ user: User; roles: Role[] } | null> => {
     const { email, password } = credentials;
     try {
       await setPersistence(auth, browserSessionPersistence);

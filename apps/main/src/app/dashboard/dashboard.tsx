@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 //TODO: move this to different module (diagramModule) so we dont have to load canvas at this point
 import { Diagram, useDiagram } from '@shared/canvas';
 import { useEffect, useState } from 'react';
+import UserMenu from '@/components/UserMenu';
 
 interface DiagramColumn {
   header: string;
@@ -28,7 +29,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <TopbarLayout>
+    <TopbarLayout userMenu={<UserMenu />}>
       <Link to={'/diagram/new'}>Diagram</Link>
       {loading ? <div>Loading...</div> : null}
       <Table columns={columns} rows={diagrams} onRowClick={onRowClick} />

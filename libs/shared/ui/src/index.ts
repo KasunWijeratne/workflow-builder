@@ -2,6 +2,7 @@ import MUIChip from '@mui/material/Chip';
 import MUIDialog from '@mui/material/Dialog';
 import MUIIconButton from '@mui/material/IconButton';
 import MUIAutocomplete from '@mui/material/Autocomplete';
+import MUIMenu from '@mui/material/Menu';
 
 import EditOutlined from '@mui/icons-material/EditOutlined';
 import DoneOutlined from '@mui/icons-material/DoneOutlined';
@@ -20,6 +21,7 @@ export const Chip = MUIChip;
 export const Dialog = MUIDialog;
 export const IconButton = MUIIconButton;
 export const Autocomplete = MUIAutocomplete;
+export const Menu = MUIMenu;
 
 //Layouts
 export * from './layouts/topbar.layout';

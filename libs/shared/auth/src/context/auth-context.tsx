@@ -46,12 +46,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   ) => {
     setLoading(true);
     const res = await authService().signIn({ email, password });
-    setUser(() => ({
-      id: res.user.uid,
-      email: res.user.email || '',
-      roles: res.roles,
-    }));
-    navigate(successRedirect);
+    if (res) {
+      setUser(() => ({
+        id: res.user.uid,
+        email: res.user.email || '',
+        roles: res.roles,
+      }));
+      navigate(successRedirect);
+    }
     setLoading(false);
   };
 

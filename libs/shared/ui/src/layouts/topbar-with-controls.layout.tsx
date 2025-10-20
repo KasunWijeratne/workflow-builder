@@ -4,13 +4,14 @@ import { Box } from '../components/Box';
 
 interface TopbarWithFloatingControlsProps extends PropsWithChildren {
   controls: React.ReactNode | null;
+  userMenu?: React.ReactNode;
 }
 
 export const TopbarWithFloatingControls: FC<
   TopbarWithFloatingControlsProps
-> = ({ children, controls }) => {
+> = ({ children, controls, userMenu }) => {
   return (
-    <TopbarLayout>
+    <TopbarLayout userMenu={userMenu}>
       <Box
         sx={{
           width: '100%',
