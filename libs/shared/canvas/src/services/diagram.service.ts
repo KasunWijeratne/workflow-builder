@@ -19,18 +19,33 @@ const diagramService = () => {
   const getDiagrams = async (user: string): Promise<Diagram[]> => {
     try {
       const diagramsCollection = collection(db, 'diagrams');
-      const q = query(diagramsCollection, where('createdBy', '==', user));
-      const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          createdBy: data.createdBy,
-          name: data.name,
-          nodes: data.nodes,
-          edges: data.edges,
-        };
+      const qCreated = query(
+        diagramsCollection,
+        where('createdBy', '==', user)
+      );
+      const qShared = query(
+        diagramsCollection,
+        where('sharedWith', 'array-contains', user)
+      );
+
+      const querySnapshot = await Promise.all([
+        getDocs(qCreated),
+        getDocs(qShared),
+      ]);
+
+      const data = querySnapshot.flatMap((snapshot) => {
+        return snapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            createdBy: data.createdBy,
+            name: data.name,
+            nodes: data.nodes,
+            edges: data.edges,
+          };
+        });
       });
+
       return data;
     } catch (error) {
       console.error('Create diagram error:', (error as FirebaseError).code);

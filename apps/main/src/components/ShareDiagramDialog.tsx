@@ -1,10 +1,4 @@
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { Dialog, Box, Input, Autocomplete, Stack, Button } from '@shared/ui';
 import { useAuth, useUsers } from '@shared/auth';
 import { useDiagram } from '@shared/canvas';
@@ -21,10 +15,10 @@ interface ShareDiagramDialogProps {
 const ShareDiagramDialog = forwardRef(
   ({ id }: ShareDiagramDialogProps, ref) => {
     const [open, setOpen] = useState(false);
+    const [shareInfo, setShareInfo] = useState<UsersListItem | null>(null);
     const [users, setUsers] = useState<UsersListItem[]>([]);
     const { user } = useAuth();
 
-    const shareInfoRef = useRef<HTMLInputElement>(null);
     const { getUsers } = useUsers();
     const { shareDiagram } = useDiagram();
 
@@ -38,7 +32,7 @@ const ShareDiagramDialog = forwardRef(
     };
 
     const handleShare = async () => {
-      const shareWith = shareInfoRef.current?.value;
+      const shareWith = shareInfo?.value;
       if (!shareWith) return;
       await shareDiagram(id, shareWith);
     };
@@ -68,14 +62,14 @@ const ShareDiagramDialog = forwardRef(
           <h2>Share Diagram</h2>
           <Autocomplete
             disablePortal
+            value={shareInfo}
             options={users || []}
             sx={{ width: 300, height: 300 }}
+            onChange={(_, item) => {
+              setShareInfo(item);
+            }}
             renderInput={(params) => (
-              <Input
-                inputRef={shareInfoRef}
-                {...params}
-                placeholder="Share with.."
-              />
+              <Input {...params} placeholder="Share with.." />
             )}
           />
           <Stack direction="row" spacing={2} justifyContent="flex-end">
