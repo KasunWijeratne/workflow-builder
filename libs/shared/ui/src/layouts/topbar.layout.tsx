@@ -3,12 +3,17 @@ import { Box } from '../components/Box';
 import { Stack } from '../components/Stack';
 import { Link } from 'react-router-dom';
 import { Typography } from '@mui/material';
+import { useTheme } from '../theme/ThemeProvider';
+
+import ThemeSwitcher from '../components/ThemeSwitcher';
 
 interface TopbarLayoutProps extends PropsWithChildren {
   userMenu?: React.ReactNode;
 }
 
 export const TopbarLayout: FC<TopbarLayoutProps> = ({ children, userMenu }) => {
+  const { mode, setMode } = useTheme();
+
   return (
     <Stack direction="column" sx={{ height: '100%' }}>
       <Stack
@@ -18,8 +23,6 @@ export const TopbarLayout: FC<TopbarLayoutProps> = ({ children, userMenu }) => {
         sx={{
           height: 60,
           p: 2,
-          borderBottom: '1px solid',
-          borderBottomColor: 'border.main',
           backgroundColor: 'primary.main',
         }}
       >
@@ -34,9 +37,12 @@ export const TopbarLayout: FC<TopbarLayoutProps> = ({ children, userMenu }) => {
             Diagram Builder
           </Link>
         </Typography>
-        {userMenu && userMenu}
+        <Stack direction={'row'}>
+          <ThemeSwitcher mode={mode} setMode={setMode} />
+          {userMenu && userMenu}
+        </Stack>
       </Stack>
-      <Box flex={1} sx={{ width: '100%', maxWidth: 1500, margin: '0 auto' }}>
+      <Box flex={1} sx={{ width: '100%' }}>
         {children}
       </Box>
     </Stack>

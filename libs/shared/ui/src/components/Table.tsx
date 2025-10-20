@@ -37,13 +37,13 @@ export const Table = <T extends { id: string; name: string }>({
           {rows.map((row) => (
             <TableRow
               key={row.id}
-              sx={{
+              sx={(theme) => ({
                 '&:hover': {
-                  backgroundColor: '#f5f5f5',
+                  backgroundColor: theme.palette.list.dark,
                   cursor: 'pointer',
                 },
                 '&:last-child td, &:last-child th': { border: 0 },
-              }}
+              })}
               onClick={() => {
                 onRowClick && onRowClick(row);
               }}

@@ -1,140 +1,58 @@
-import {
-  ThemeProvider as MUIThemeProvider,
-  createTheme,
-} from '@mui/material/styles';
+import { ThemeProvider as MUIThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { root } from './theme';
 import './ThemeProvider.d.ts';
-import { grey } from '@mui/material/colors';
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+} from 'react';
+import { lightTheme } from './light-theme';
+import { darkTheme } from './dark-theme';
 
 declare module '@mui/material/styles' {
   interface Palette {
     border: Palette['primary'];
+    node: Palette['primary'];
+    banner: Palette['primary'];
+    list: Palette['primary'];
   }
   interface PaletteOptions {
     border?: PaletteOptions['primary'];
+    node?: PaletteOptions['primary'];
+    banner?: PaletteOptions['primary'];
+    list?: PaletteOptions['primary'];
   }
 }
 
-const lightTheme = createTheme({
-  cssVariables: true,
-  typography: {
-    fontSize: 14,
-    h2: {
-      fontSize: '2rem',
-    },
-    h3: {
-      fontSize: '1.5rem',
-    },
-    h4: {
-      fontSize: '1.25rem',
-    },
-  },
-  palette: {
-    primary: {
-      main: root['--primary-color-main'],
-      light: root['--primary-color-light'],
-      dark: root['--primary-color-dark'],
-    },
-    secondary: {
-      main: root['--secondary-color-main'],
-      light: root['--secondary-color-light'],
-      dark: root['--secondary-color-dark'],
-    },
-    border: {
-      main: grey[300],
-      light: grey[100],
-      dark: grey[500],
-    },
-    text: {
-      primary: '#000000',
-      secondary: grey[600],
-    },
-  },
-  components: {
-    MuiOutlinedInput: {
-      styleOverrides: {
-        input: {
-          padding: '8px',
-          '&:-webkit-autofill': {
-            WebkitBoxShadow: '0 0 0 1000px #ffeeffff inset',
-            WebkitTextFillColor: '#000000',
-          },
-        },
-      },
-    },
-    MuiAutocomplete: {
-      styleOverrides: {
-        root: {
-          '.MuiInputBase-root': {
-            paddingTop: 0,
-            paddingBottom: 0,
-          },
-        },
-        input: {
-          paddingLeft: 2,
-        },
-      },
-    },
-    MuiButton: {
-      defaultProps: {
-        disableElevation: true,
-        disableRipple: true,
-      },
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-          fontWeight: 600,
-        },
-      },
-    },
-    MuiFormControl: {
-      styleOverrides: {
-        root: {
-          marginTop: 0,
-          marginBottom: '8px',
-        },
-      },
-    },
-    MuiTableCell: {
-      styleOverrides: {
-        root: {
-          borderBottom: `none`,
-        },
-        head: {
-          color: grey[700],
-        },
-      },
-    },
-  },
-});
+export interface ThemeContextType {
+  mode: 'light' | 'dark';
+  setMode: Dispatch<SetStateAction<'light' | 'dark'>>;
+}
 
-const darkTheme = createTheme({
-  cssVariables: true,
-  palette: {
-    primary: {
-      main: root['--primary-color-main'],
-      light: root['--primary-color-light'],
-      dark: root['--primary-color-dark'],
-    },
-    secondary: {
-      main: root['--secondary-color-main'],
-      light: root['--secondary-color-light'],
-      dark: root['--secondary-color-dark'],
-    },
-  },
-});
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const themePreference = 'light';
-  const theme = themePreference === 'light' ? lightTheme : darkTheme;
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const theme = mode === 'light' ? lightTheme : darkTheme;
 
   return (
-    <MUIThemeProvider theme={theme}>
-      <CssBaseline />
-      {children}
-    </MUIThemeProvider>
+    <ThemeContext.Provider value={{ mode, setMode }}>
+      <MUIThemeProvider theme={theme}>
+        <CssBaseline />
+        {children}
+      </MUIThemeProvider>
+    </ThemeContext.Provider>
   );
 }
 
 export { ThemeProvider };
+
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useNotification must be used within NotificationProvider');
+  }
+  return context;
+};

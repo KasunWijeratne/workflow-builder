@@ -42,7 +42,7 @@ export const CustomLabelNode = (props: NodeProps) => {
         border: 'solid 1px',
         borderRadius: 3,
         borderColor: 'border.dark',
-        backgroundColor: 'grey.100',
+        backgroundColor: 'node.main',
       }}
     >
       <Handle type="target" position={Position.Top} />

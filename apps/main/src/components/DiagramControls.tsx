@@ -10,7 +10,7 @@ import {
   ShareIcon,
   Stack,
 } from '@shared/ui';
-import { Role, RoleGate } from '@shared/auth';
+import { Role, RoleGate, useAuth } from '@shared/auth';
 import ShareDiagramDialog from '@/components/ShareDiagramDialog';
 import { useDiagram } from '@shared/canvas';
 
@@ -43,7 +43,7 @@ const DiagramControls = ({
           direction="row"
           alignItems={'center'}
           spacing={1}
-          sx={{ background: 'white', borderRadius: 5, px: 2 }}
+          sx={{ backgroundColor: 'background.paper', borderRadius: 5, px: 2 }}
         >
           {id && (
             <>
@@ -81,7 +81,8 @@ const DiagramControls = ({
 
 const DiagramMoreControls = ({ id, disabled }: DiagramMoreControlsProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { deleteDiagram } = useDiagram();
+  const { user } = useAuth();
+  const { deleteDiagram } = useDiagram(user);
 
   const open = Boolean(anchorEl);
 

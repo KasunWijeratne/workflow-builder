@@ -36,7 +36,10 @@ const Dashboard = () => {
       <Box
         p={4}
         textAlign="center"
-        sx={{ background: 'linear-gradient(0deg, white, #e5e9ff)' }}
+        sx={(theme) => ({
+          background: `linear-gradient(0deg, transparent, ${theme.palette.banner.main})`,
+          backgroundColor: 'background.paper',
+        })}
       >
         <Typography variant="h2" mb={4}>
           Hello,{' '}

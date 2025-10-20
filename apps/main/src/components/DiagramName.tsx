@@ -21,7 +21,12 @@ const DiagramName = ({ name, disabled, onChange }: DiagramNameProps) => {
     <Stack
       direction="row"
       alignItems={'center'}
-      sx={{ background: 'white', borderRadius: 5, px: 2, py: '6px' }}
+      sx={{
+        backgroundColor: 'background.paper',
+        borderRadius: 5,
+        px: 2,
+        py: '6px',
+      }}
       gap={1}
     >
       {editable && (
