@@ -70,12 +70,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const logout = async () => {
-    try {
-      //TODO: handle logout here
-    } catch (error) {
-      console.error('Logout error:', error);
-      throw error;
-    }
+    setLoading(true);
+    await authService().signOut();
+    setLoading(false);
   };
 
   const isAllowed = useCallback(

@@ -1,10 +1,12 @@
 import { Box, IconButton, Menu, MenuItem } from '@shared/ui';
 import { useState } from 'react';
 import { useAuth } from '@shared/auth';
+import { useNavigate } from 'react-router-dom';
 
 const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const open = Boolean(anchorEl);
 
@@ -16,8 +18,9 @@ const UserMenu = () => {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    //logout
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
   };
 
   return (
@@ -59,7 +62,7 @@ const UserMenu = () => {
         <Box sx={{ p: 2, borderBottom: 'solid 1px #eee', mb: 1 }}>
           {user?.email}
         </Box>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </>
   );

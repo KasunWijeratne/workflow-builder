@@ -7,6 +7,7 @@ import {
   setPersistence,
   browserSessionPersistence,
   onAuthStateChanged,
+  signOut as firebaseSignOut,
 } from 'firebase/auth';
 import {
   addDoc,
@@ -78,6 +79,15 @@ const authService = () => {
     }
   };
 
+  const signOut = async () => {
+    try {
+      await firebaseSignOut(auth);
+    } catch (error) {
+      console.error('Signout error:', (error as AuthError).code);
+      throw error;
+    }
+  };
+
   const checkUser = (callback: (user: UserWithRoles | null) => void) => {
     return onAuthStateChanged(auth, async (user) => {
       const userWithRoles = user ? await getUserWithRoles(user) : null;
@@ -89,6 +99,7 @@ const authService = () => {
     signIn,
     signUp,
     checkUser,
+    signOut,
   };
 };
 
