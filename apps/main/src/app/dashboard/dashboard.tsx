@@ -1,9 +1,8 @@
-import { TopbarLayout, Table, Box, Typography, Button } from '@shared/ui';
+import { Table, Box, Typography, Button } from '@shared/ui';
 import { useNavigate } from 'react-router-dom';
 //TODO: move this to different module (diagramModule) so we dont have to load canvas at this point
 import { Diagram, useDiagram } from '@shared/canvas';
 import { useEffect, useState } from 'react';
-import UserMenu from '@/components/UserMenu';
 import { Role, RoleGate, useAuth } from '@shared/auth';
 
 interface DiagramColumn {
@@ -31,7 +30,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <TopbarLayout userMenu={<UserMenu />}>
+    <>
       <Box
         p={4}
         textAlign="center"
@@ -70,7 +69,7 @@ const Dashboard = () => {
           <Table columns={columns} rows={diagrams} onRowClick={onRowClick} />
         )}
       </Box>
-    </TopbarLayout>
+    </>
   );
 };
 

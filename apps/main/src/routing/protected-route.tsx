@@ -20,7 +20,7 @@ export const ProtectedRoute = ({
     return <Navigate to={fallbackPath} state={{ from: location }} replace />;
   }
 
-  if (user && permissions && permissions.length > 0) {
+  if (user && user.id && permissions && permissions.length > 0) {
     const isAllowed = user.roles.some((role) => permissions.includes(role));
 
     if (!isAllowed) {

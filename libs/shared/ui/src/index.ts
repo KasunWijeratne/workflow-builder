@@ -37,7 +37,7 @@ export const Typography = MUITypography;
 
 //Layouts
 export * from './layouts/topbar.layout';
-export * from './layouts/topbar-with-controls.layout';
+export * from './layouts/diagram-controls.layout';
 
 //Icons
 // export * from '@mui/icons-material';

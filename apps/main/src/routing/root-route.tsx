@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '@shared/auth';
 
 const RootRoute = () => {
@@ -7,14 +7,12 @@ const RootRoute = () => {
   const { user, loading } = useAuth();
 
   useEffect(() => {
-    if (!loading && user) {
+    if (!loading && user?.id) {
       navigate('/dashboard');
-    } else {
-      navigate('/login');
     }
   }, [navigate, user, loading]);
 
-  return null;
+  return <Outlet />;
 };
 
 export default RootRoute;

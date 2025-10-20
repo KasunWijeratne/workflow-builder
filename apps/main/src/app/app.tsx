@@ -1,6 +1,6 @@
 import Router from '@/routing/router';
-import { initAuth, AuthProvider } from '@shared/auth';
-import { NotificationProvider, ThemeProvider } from '@shared/ui';
+import { initAuth } from '@shared/auth';
+import { ThemeProvider } from '@shared/ui';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY ?? '',
@@ -16,11 +16,7 @@ initAuth(firebaseConfig);
 function App() {
   return (
     <ThemeProvider>
-      <NotificationProvider>
-        <AuthProvider>
-          <Router />
-        </AuthProvider>
-      </NotificationProvider>
+      <Router />
     </ThemeProvider>
   );
 }

@@ -8,7 +8,6 @@ import {
 } from 'react';
 import { Role, User } from '../types/user.type';
 import authService from '../services/auth.service';
-import { useNavigate } from 'react-router-dom';
 import { useNotification } from '@shared/ui';
 import { AuthError } from 'firebase/auth';
 
@@ -39,7 +38,6 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   const { addNotification } = useNotification();
 
   const login = async (
@@ -56,7 +54,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           email: res.user.email || '',
           roles: res.roles,
         }));
-        navigate(successRedirect);
+        window.location.assign(successRedirect);
       }
     } catch (error) {
       const code = (error as AuthError).code;
@@ -76,7 +74,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       setLoading(true);
       await authService().signUp({ email, password, roles });
-      navigate(successRedirect);
+      window.location.assign(successRedirect);
       addNotification(`Signup success`, 'success');
     } catch (error) {
       const code = (error as AuthError).code;

@@ -20,15 +20,16 @@ export const TopbarLayout: FC<TopbarLayoutProps> = ({ children, userMenu }) => {
           p: 2,
           borderBottom: '1px solid',
           borderBottomColor: 'border.main',
+          backgroundColor: 'primary.main',
         }}
       >
         <Typography
           variant="h2"
-          style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}
+          style={{ margin: 0, fontSize: '1rem', fontWeight: 400 }}
         >
           <Link
             to={'/dashboard'}
-            style={{ textDecoration: 'none', color: 'black' }}
+            style={{ textDecoration: 'none', color: 'white' }}
           >
             Diagram Builder
           </Link>

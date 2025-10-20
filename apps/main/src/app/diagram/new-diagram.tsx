@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { TopbarWithFloatingControls } from '@shared/ui';
+import { DiagramControlsLayout } from '@shared/ui';
 import {
   Canvas,
   addEdge,
@@ -18,7 +18,6 @@ import {
 } from '@shared/nodes-customlabel';
 import DiagramControls from '@/components/DiagramControls';
 import DiagramName from '@/components/DiagramName';
-import UserMenu from '@/components/UserMenu';
 
 const initialNodes = [
   {
@@ -97,7 +96,7 @@ const NewDiagram = () => {
   }, [createDiagram, diagramName, nodes, edges]);
 
   return (
-    <TopbarWithFloatingControls
+    <DiagramControlsLayout
       controls={
         <DiagramControls
           name={
@@ -111,7 +110,6 @@ const NewDiagram = () => {
           onSave={onSave}
         />
       }
-      userMenu={<UserMenu />}
     >
       <div style={{ width: '100%', height: '100%' }} ref={reactFlowWrapper}>
         <Canvas
@@ -127,7 +125,7 @@ const NewDiagram = () => {
           nodeTypes={nodeTypes}
         />
       </div>
-    </TopbarWithFloatingControls>
+    </DiagramControlsLayout>
   );
 };
 
