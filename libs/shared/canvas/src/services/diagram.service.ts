@@ -62,6 +62,7 @@ const diagramService = () => {
         name,
         nodes,
         edges,
+        sharedWith: [],
       });
     } catch (error) {
       console.error('Create diagram error:', (error as FirebaseError).code);
@@ -71,8 +72,8 @@ const diagramService = () => {
 
   const updateDiagram = async (diagram: Diagram) => {
     try {
-      const docRef = doc(db, 'diagrams', diagram.id);
-      await updateDoc(docRef, {
+      const diagramDoc = doc(db, 'diagrams', diagram.id);
+      await updateDoc(diagramDoc, {
         name: diagram.name,
         nodes: diagram.nodes,
         edges: diagram.edges,
@@ -85,8 +86,8 @@ const diagramService = () => {
 
   const deleteDiagram = async (id: string) => {
     try {
-      const docRef = doc(db, 'diagrams', id);
-      await deleteDoc(docRef);
+      const diagramDoc = doc(db, 'diagrams', id);
+      await deleteDoc(diagramDoc);
     } catch (error) {
       console.error('Delete diagram error:', (error as FirebaseError).code);
       throw error;
@@ -94,7 +95,21 @@ const diagramService = () => {
   };
 
   const shareDiagram = async (diagramId: string, userId: string) => {
-    //Share diagram
+    try {
+      const diagramDoc = doc(db, 'diagrams', diagramId);
+      const diagram = await getDoc(diagramDoc);
+      if (diagram.exists()) {
+        const diagramData = diagram.data();
+        const sharedWith = diagramData.sharedWith || [];
+        if (!sharedWith.includes(userId)) {
+          sharedWith.push(userId);
+          await updateDoc(diagramDoc, { sharedWith });
+        }
+      }
+    } catch (error) {
+      console.error('Share diagram error:', (error as FirebaseError).code);
+      throw error;
+    }
   };
 
   return {

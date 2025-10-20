@@ -41,7 +41,7 @@ const DiagramControls = ({ id, name, onSave }: DiagramControlsProps) => {
               >
                 Share
               </Button>
-              <ShareDiagramDialog ref={shareDialogRef} />
+              <ShareDiagramDialog id={id} ref={shareDialogRef} />
             </>
           )}
           <Button variant="contained" color="primary" onClick={onSave}>

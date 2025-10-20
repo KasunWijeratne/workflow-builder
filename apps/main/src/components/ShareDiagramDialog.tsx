@@ -6,74 +6,90 @@ import {
   useState,
 } from 'react';
 import { Dialog, Box, Input, Autocomplete, Stack, Button } from '@shared/ui';
-import { useUsers } from '@shared/auth';
+import { useAuth, useUsers } from '@shared/auth';
+import { useDiagram } from '@shared/canvas';
 
 interface UsersListItem {
   label: string;
   value: string;
 }
 
-const ShareDiagramDialog = forwardRef((_, ref) => {
-  const [open, setOpen] = useState(false);
-  const [users, setUsers] = useState<UsersListItem[]>([]);
+interface ShareDiagramDialogProps {
+  id: string;
+}
 
-  const shareInfoRef = useRef<HTMLInputElement>(null);
-  const { getUsers } = useUsers();
+const ShareDiagramDialog = forwardRef(
+  ({ id }: ShareDiagramDialogProps, ref) => {
+    const [open, setOpen] = useState(false);
+    const [users, setUsers] = useState<UsersListItem[]>([]);
+    const { user } = useAuth();
 
-  useImperativeHandle(ref, () => ({
-    close: () => setOpen(false),
-    open: () => setOpen(true),
-  }));
+    const shareInfoRef = useRef<HTMLInputElement>(null);
+    const { getUsers } = useUsers();
+    const { shareDiagram } = useDiagram();
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+    useImperativeHandle(ref, () => ({
+      close: () => setOpen(false),
+      open: () => setOpen(true),
+    }));
 
-  const handleShare = () => {
-    console.log('shareInfoRef.current', shareInfoRef.current?.value);
-  };
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const usersList = await getUsers();
-      setUsers(
-        usersList.map((user) => ({
-          label: user.email,
-          value: user.uid,
-        }))
-      );
+    const handleClose = () => {
+      setOpen(false);
     };
 
-    fetchUsers();
-  }, []);
+    const handleShare = async () => {
+      const shareWith = shareInfoRef.current?.value;
+      if (!shareWith) return;
+      await shareDiagram(id, shareWith);
+    };
 
-  return (
-    <Dialog onClose={handleClose} open={open}>
-      <Box sx={{ padding: 2, width: 400 }}>
-        <h2>Share Diagram</h2>
-        <Autocomplete
-          disablePortal
-          options={users || []}
-          sx={{ width: 300, height: 300 }}
-          renderInput={(params) => (
-            <Input
-              inputRef={shareInfoRef}
-              {...params}
-              placeholder="Share with.."
-            />
-          )}
-        />
-        <Stack direction="row" spacing={2} justifyContent="flex-end">
-          <Button variant="text" color="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button variant="contained" color="primary" onClick={handleShare}>
-            Share
-          </Button>
-        </Stack>
-      </Box>
-    </Dialog>
-  );
-});
+    useEffect(() => {
+      const fetchUsers = async () => {
+        const usersList = await getUsers();
+        setUsers(
+          usersList.reduce((list: UsersListItem[], { email, uid }) => {
+            if (uid !== user?.id) {
+              list.push({
+                label: email,
+                value: uid,
+              });
+            }
+            return list;
+          }, [] as UsersListItem[])
+        );
+      };
+
+      fetchUsers();
+    }, []);
+
+    return (
+      <Dialog onClose={handleClose} open={open}>
+        <Box sx={{ padding: 2, width: 400 }}>
+          <h2>Share Diagram</h2>
+          <Autocomplete
+            disablePortal
+            options={users || []}
+            sx={{ width: 300, height: 300 }}
+            renderInput={(params) => (
+              <Input
+                inputRef={shareInfoRef}
+                {...params}
+                placeholder="Share with.."
+              />
+            )}
+          />
+          <Stack direction="row" spacing={2} justifyContent="flex-end">
+            <Button variant="text" color="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleShare}>
+              Share
+            </Button>
+          </Stack>
+        </Box>
+      </Dialog>
+    );
+  }
+);
 
 export default ShareDiagramDialog;
