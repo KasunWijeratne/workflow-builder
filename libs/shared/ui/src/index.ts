@@ -50,3 +50,6 @@ export const DeleteIcon = DeleteOutlinedIcon;
 export const LogoutIcon = LogoutOutlinedIcon;
 export const EmailIcon = EmailOutlinedIcon;
 export const SendIcon = SendOutlinedIcon;
+
+//Context
+export * from './context/notification.context';

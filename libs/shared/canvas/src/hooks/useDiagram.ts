@@ -3,52 +3,93 @@ import diagramService from '../services/diagram.service';
 import { Diagram } from '../types/diagram.type';
 import { useAuth } from '@shared/auth';
 import { useNavigate } from 'react-router-dom';
+import { FirebaseError } from '@firebase/util';
+import { useNotification } from '@shared/ui';
 
 export const useDiagram = () => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { addNotification } = useNotification();
 
   const getDiagrams = async (): Promise<Diagram[]> => {
-    setLoading(true);
-    const diagrams = await diagramService().getDiagrams(user?.id || '');
-    setLoading(false);
-    return diagrams;
+    try {
+      setLoading(true);
+      const diagrams = await diagramService().getDiagrams(user?.id || '');
+      return diagrams;
+    } catch (error) {
+      const code = (error as FirebaseError).code;
+      addNotification(`Failed to load diagrams: ${code}`, 'error');
+      return [];
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getDiagramById = async (id: string) => {
-    setLoading(true);
-    const data = await diagramService().getDiagramById(id);
-    setLoading(false);
-    return data;
+    try {
+      setLoading(true);
+      const data = await diagramService().getDiagramById(id);
+      return data;
+    } catch (error) {
+      const code = (error as FirebaseError).code;
+      addNotification(`Failed to load diagram: ${code}`, 'error');
+      return null;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const createDiagram = async (diagram: Omit<Diagram, 'createdBy' | 'id'>) => {
-    setLoading(true);
-    await diagramService().createNewDiagram({
-      ...diagram,
-      createdBy: user?.id || '',
-    });
-    setLoading(false);
+    try {
+      setLoading(true);
+      await diagramService().createNewDiagram({
+        ...diagram,
+        createdBy: user?.id || '',
+      });
+    } catch (error) {
+      const code = (error as FirebaseError).code;
+      addNotification(`Failed to create diagram: ${code}`, 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const updateDiagram = async (diagram: Diagram) => {
-    setLoading(true);
-    await diagramService().updateDiagram(diagram);
-    setLoading(false);
+    try {
+      setLoading(true);
+      await diagramService().updateDiagram(diagram);
+    } catch (error) {
+      const code = (error as FirebaseError).code;
+      addNotification(`Failed to update diagram: ${code}`, 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const deleteDiagram = async (diagramId: string) => {
-    setLoading(true);
-    await diagramService().deleteDiagram(diagramId);
-    setLoading(false);
-    navigate('/dashboard');
+    try {
+      setLoading(true);
+      await diagramService().deleteDiagram(diagramId);
+      navigate('/dashboard');
+    } catch (error) {
+      const code = (error as FirebaseError).code;
+      addNotification(`Failed to delete diagram: ${code}`, 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const shareDiagram = async (diagramId: string, userId: string) => {
-    setLoading(true);
-    await diagramService().shareDiagram(diagramId, userId);
-    setLoading(false);
+    try {
+      setLoading(true);
+      await diagramService().shareDiagram(diagramId, userId);
+    } catch (error) {
+      const code = (error as FirebaseError).code;
+      addNotification(`Failed to share diagram: ${code}`, 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return {

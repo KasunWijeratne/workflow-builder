@@ -54,14 +54,9 @@ const diagramService = () => {
   };
 
   const getDiagramById = async (id: string) => {
-    try {
-      const diagramDoc = doc(db, 'diagrams', id);
-      const diagram = await getDoc(diagramDoc);
-      return diagram.data();
-    } catch (error) {
-      console.error('Fetch diagram error:', (error as FirebaseError).code);
-      throw error;
-    }
+    const diagramDoc = doc(db, 'diagrams', id);
+    const diagram = await getDoc(diagramDoc);
+    return diagram.data();
   };
 
   const createNewDiagram = async ({
@@ -70,60 +65,40 @@ const diagramService = () => {
     edges,
     name,
   }: Omit<Diagram, 'id'>) => {
-    try {
-      const diagramsCollection = collection(db, 'diagrams');
-      await addDoc(diagramsCollection, {
-        createdBy,
-        name,
-        nodes,
-        edges,
-        sharedWith: [],
-      });
-    } catch (error) {
-      console.error('Create diagram error:', (error as FirebaseError).code);
-      throw error;
-    }
+    const diagramsCollection = collection(db, 'diagrams');
+    await addDoc(diagramsCollection, {
+      createdBy,
+      name,
+      nodes,
+      edges,
+      sharedWith: [],
+    });
   };
 
   const updateDiagram = async (diagram: Diagram) => {
-    try {
-      const diagramDoc = doc(db, 'diagrams', diagram.id);
-      await updateDoc(diagramDoc, {
-        name: diagram.name,
-        nodes: diagram.nodes,
-        edges: diagram.edges,
-      });
-    } catch (error) {
-      console.error('Update diagram error:', (error as FirebaseError).code);
-      throw error;
-    }
+    const diagramDoc = doc(db, 'diagrams', diagram.id);
+    await updateDoc(diagramDoc, {
+      name: diagram.name,
+      nodes: diagram.nodes,
+      edges: diagram.edges,
+    });
   };
 
   const deleteDiagram = async (id: string) => {
-    try {
-      const diagramDoc = doc(db, 'diagrams', id);
-      await deleteDoc(diagramDoc);
-    } catch (error) {
-      console.error('Delete diagram error:', (error as FirebaseError).code);
-      throw error;
-    }
+    const diagramDoc = doc(db, 'diagrams', id);
+    await deleteDoc(diagramDoc);
   };
 
   const shareDiagram = async (diagramId: string, userId: string) => {
-    try {
-      const diagramDoc = doc(db, 'diagrams', diagramId);
-      const diagram = await getDoc(diagramDoc);
-      if (diagram.exists()) {
-        const diagramData = diagram.data();
-        const sharedWith = diagramData.sharedWith || [];
-        if (!sharedWith.includes(userId)) {
-          sharedWith.push(userId);
-          await updateDoc(diagramDoc, { sharedWith });
-        }
+    const diagramDoc = doc(db, 'diagrams', diagramId);
+    const diagram = await getDoc(diagramDoc);
+    if (diagram.exists()) {
+      const diagramData = diagram.data();
+      const sharedWith = diagramData.sharedWith || [];
+      if (!sharedWith.includes(userId)) {
+        sharedWith.push(userId);
+        await updateDoc(diagramDoc, { sharedWith });
       }
-    } catch (error) {
-      console.error('Share diagram error:', (error as FirebaseError).code);
-      throw error;
     }
   };
 

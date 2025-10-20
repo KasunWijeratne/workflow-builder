@@ -9,6 +9,8 @@ import {
 import { Role, User } from '../types/user.type';
 import authService from '../services/auth.service';
 import { useNavigate } from 'react-router-dom';
+import { useNotification } from '@shared/ui';
+import { AuthError } from 'firebase/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -38,23 +40,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { addNotification } = useNotification();
 
   const login = async (
     email: string,
     password: string,
     successRedirect: string
   ) => {
-    setLoading(true);
-    const res = await authService().signIn({ email, password });
-    if (res) {
-      setUser(() => ({
-        id: res.user.uid,
-        email: res.user.email || '',
-        roles: res.roles,
-      }));
-      navigate(successRedirect);
+    try {
+      setLoading(true);
+      const res = await authService().signIn({ email, password });
+      if (res) {
+        setUser(() => ({
+          id: res.user.uid,
+          email: res.user.email || '',
+          roles: res.roles,
+        }));
+        navigate(successRedirect);
+      }
+    } catch (error) {
+      const code = (error as AuthError).code;
+      console.error('Login error:', code);
+      addNotification(`Login error: ${code}`, 'error');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const signUp = async (
@@ -63,16 +73,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     roles: Role[],
     successRedirect: string
   ) => {
-    setLoading(true);
-    await authService().signUp({ email, password, roles });
-    navigate(successRedirect);
-    setLoading(false);
+    try {
+      setLoading(true);
+      await authService().signUp({ email, password, roles });
+      navigate(successRedirect);
+      addNotification(`Signup success`, 'success');
+    } catch (error) {
+      const code = (error as AuthError).code;
+      console.error('Signup error:', code);
+      addNotification(`Signup error: ${code}`, 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = async () => {
-    setLoading(true);
-    await authService().signOut();
-    setLoading(false);
+    try {
+      setLoading(true);
+      await authService().signOut();
+    } catch (error) {
+      const code = (error as AuthError).code;
+      console.error('Logout error:', code);
+      addNotification(`Logout error: ${code}`, 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const isAllowed = useCallback(

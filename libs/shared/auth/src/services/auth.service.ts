@@ -45,14 +45,9 @@ const authService = () => {
     password: string;
   }): Promise<{ user: User; roles: Role[] } | null> => {
     const { email, password } = credentials;
-    try {
-      await setPersistence(auth, browserSessionPersistence);
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
-      return getUserWithRoles(user);
-    } catch (error) {
-      console.error('Login error:', (error as AuthError).code);
-      throw error;
-    }
+    await setPersistence(auth, browserSessionPersistence);
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    return getUserWithRoles(user);
   };
 
   const signUp = async (credentials: {
@@ -61,31 +56,21 @@ const authService = () => {
     roles: Role[];
   }) => {
     const { email, password, roles } = credentials;
-    try {
-      const { user } = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const usersCollection = collection(db, 'users');
-      await addDoc(usersCollection, {
-        roles,
-        email,
-        uid: user.uid,
-      });
-    } catch (error) {
-      console.error('Login error:', (error as AuthError).code);
-      throw error;
-    }
+    const { user } = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const usersCollection = collection(db, 'users');
+    await addDoc(usersCollection, {
+      roles,
+      email,
+      uid: user.uid,
+    });
   };
 
   const signOut = async () => {
-    try {
-      await firebaseSignOut(auth);
-    } catch (error) {
-      console.error('Signout error:', (error as AuthError).code);
-      throw error;
-    }
+    await firebaseSignOut(auth);
   };
 
   const checkUser = (callback: (user: UserWithRoles | null) => void) => {
