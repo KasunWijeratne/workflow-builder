@@ -8,8 +8,12 @@ import MUITypography from '@mui/material/Typography';
 import EditOutlined from '@mui/icons-material/EditOutlined';
 import DoneOutlined from '@mui/icons-material/DoneOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Save from '@mui/icons-material/Save';
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import Share from '@mui/icons-material/Share';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 
 //Theme
 export * from './theme/ThemeProvider';
@@ -40,5 +44,9 @@ export * from './layouts/topbar-with-controls.layout';
 export const EditIcon = EditOutlined;
 export const DoneIcon = DoneOutlined;
 export const MoreIcon = MoreVertIcon;
-export const SaveIcon = Save;
+export const SaveIcon = SaveOutlinedIcon;
 export const ShareIcon = Share;
+export const DeleteIcon = DeleteOutlinedIcon;
+export const LogoutIcon = LogoutOutlinedIcon;
+export const EmailIcon = EmailOutlinedIcon;
+export const SendIcon = SendOutlinedIcon;

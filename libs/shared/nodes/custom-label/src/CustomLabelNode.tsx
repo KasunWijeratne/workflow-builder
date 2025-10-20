@@ -1,5 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { Box, IconButton, Input, DoneIcon, EditIcon } from '@shared/ui';
+import {
+  Box,
+  IconButton,
+  Input,
+  DoneIcon,
+  EditIcon,
+  Typography,
+  Stack,
+} from '@shared/ui';
 import { Role, RoleGate } from '@shared/auth';
 import { Position, Handle, NodeProps, useReactFlow } from '@xyflow/react';
 
@@ -14,7 +22,7 @@ export const CustomLabelNode = (props: NodeProps) => {
 
   const onLabelChange = () => {
     const newLabel = labelInput.current?.value;
-    if (newLabel !== label) {
+    if (newLabel && newLabel !== label) {
       updateNodeData(props.id, { label: newLabel });
     }
     setEditable(false);
@@ -28,30 +36,50 @@ export const CustomLabelNode = (props: NodeProps) => {
   }, [editable, label]);
 
   return (
-    <Box sx={{ border: 'solid 1px', borderRadius: 1, py: 1, px: 2 }}>
+    <Box
+      sx={{
+        p: 1,
+        border: 'solid 1px',
+        borderRadius: 3,
+        borderColor: 'border.dark',
+        backgroundColor: 'grey.100',
+      }}
+    >
       <Handle type="target" position={Position.Top} />
 
       {editable ? (
-        <>
+        <Stack direction={'row'} alignItems={'center'}>
           <Input
-            id="text"
             placeholder="Label"
-            name="text"
+            size="small"
             inputRef={labelInput}
+            sx={{ mb: 0, mr: 1 }}
+            slotProps={{
+              input: {
+                sx: {
+                  '& input': {
+                    padding: 1,
+                    height: 15,
+                  },
+                },
+              },
+            }}
           />
           <IconButton onClick={onLabelChange} size="small">
-            <DoneIcon />
+            <DoneIcon sx={{ fontSize: 15, color: 'secondary.main' }} />
           </IconButton>
-        </>
+        </Stack>
       ) : (
-        <>
-          <span>{label}</span>
+        <Stack direction={'row'} alignItems={'center'}>
+          <Typography variant="body1" sx={{ ml: 1 }}>
+            {label}
+          </Typography>
           <RoleGate permissions={[Role.EDITOR]}>
             <IconButton onClick={() => setEditable(!editable)} size="small">
-              <EditIcon />
+              <EditIcon sx={{ fontSize: 15 }} />
             </IconButton>
           </RoleGate>
-        </>
+        </Stack>
       )}
 
       <Handle type="source" position={Position.Bottom} />

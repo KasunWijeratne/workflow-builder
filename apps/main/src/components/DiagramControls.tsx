@@ -1,6 +1,7 @@
 import { ReactNode, useRef, useState } from 'react';
 import {
   Button,
+  DeleteIcon,
   IconButton,
   Menu,
   MenuItem,
@@ -99,7 +100,10 @@ const DiagramMoreControls = ({ id }: DiagramMoreControlsProps) => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleDeleteDiagram}>Delete</MenuItem>
+        <MenuItem onClick={handleDeleteDiagram}>
+          <DeleteIcon fontSize="small" sx={{ mr: 1, color: 'warning.main' }} />
+          Delete
+        </MenuItem>
       </Menu>
     </>
   );

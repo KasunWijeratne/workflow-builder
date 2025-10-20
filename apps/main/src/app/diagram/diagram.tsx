@@ -144,7 +144,6 @@ const ViewDiagram = () => {
           fitViewOptions={{ padding: 2 }}
           nodeOrigin={nodeOrigin}
           nodeTypes={nodeTypes}
-          style={{ backgroundColor: '#eee' }}
         />
       </div>
     </TopbarWithFloatingControls>

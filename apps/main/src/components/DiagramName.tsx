@@ -43,7 +43,7 @@ const DiagramName = ({ name, onChange }: DiagramNameProps) => {
         <>
           <Typography variant="body1">{name}</Typography>
           <IconButton size="small" onClick={() => setEditable(true)}>
-            <EditIcon fontSize="small" />
+            <EditIcon fontSize="small" sx={{ color: 'secondary.main' }} />
           </IconButton>
         </>
       )}

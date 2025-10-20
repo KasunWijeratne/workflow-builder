@@ -31,7 +31,9 @@ export const Canvas = (props: CanvasProps) => {
     [isAllowed, props]
   );
 
-  return <ReactFlow {...validProps} fitView />;
+  return (
+    <ReactFlow style={{ backgroundColor: '#eee' }} {...validProps} fitView />
+  );
 };
 
 export default Canvas;
