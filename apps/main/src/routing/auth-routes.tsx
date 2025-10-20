@@ -1,4 +1,5 @@
 import { AppRouteObject } from '@/types/router.type';
+import { LinearProgress } from '@shared/ui';
 import React, { Suspense } from 'react';
 
 const Login = React.lazy(() => import('@/app/auth/login'));
@@ -11,7 +12,7 @@ export const authRoutes: AppRouteObject[] = [
       permissions: [],
     },
     element: (
-      <Suspense fallback={null}>
+      <Suspense fallback={<LinearProgress />}>
         <Login />
       </Suspense>
     ),
@@ -22,7 +23,7 @@ export const authRoutes: AppRouteObject[] = [
       permissions: [],
     },
     element: (
-      <Suspense fallback={null}>
+      <Suspense fallback={<LinearProgress />}>
         <SignUp />
       </Suspense>
     ),

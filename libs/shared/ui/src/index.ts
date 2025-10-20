@@ -4,6 +4,7 @@ import MUIIconButton from '@mui/material/IconButton';
 import MUIAutocomplete from '@mui/material/Autocomplete';
 import MUIMenu from '@mui/material/Menu';
 import MUITypography from '@mui/material/Typography';
+import MUITLinearProgress from '@mui/material/LinearProgress';
 
 import EditOutlined from '@mui/icons-material/EditOutlined';
 import DoneOutlined from '@mui/icons-material/DoneOutlined';
@@ -34,6 +35,7 @@ export const IconButton = MUIIconButton;
 export const Autocomplete = MUIAutocomplete;
 export const Menu = MUIMenu;
 export const Typography = MUITypography;
+export const LinearProgress = MUITLinearProgress;
 
 //Layouts
 export * from './layouts/topbar.layout';
