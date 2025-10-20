@@ -4,6 +4,17 @@ import {
 } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { root } from './theme';
+import './ThemeProvider.d.ts';
+import { grey } from '@mui/material/colors';
+
+declare module '@mui/material/styles' {
+  interface Palette {
+    border: Palette['primary'];
+  }
+  interface PaletteOptions {
+    border?: PaletteOptions['primary'];
+  }
+}
 
 const lightTheme = createTheme({
   cssVariables: true,
@@ -20,6 +31,11 @@ const lightTheme = createTheme({
       main: root['--secondary-color-main'],
       light: root['--secondary-color-light'],
       dark: root['--secondary-color-dark'],
+    },
+    border: {
+      main: grey[300],
+      light: grey[100],
+      dark: grey[500],
     },
   },
   components: {
