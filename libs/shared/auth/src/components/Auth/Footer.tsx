@@ -2,10 +2,11 @@ import { Box, Button, Typography } from '@shared/ui';
 
 interface AuthFooterProps {
   loading: boolean;
+  buttonText: string;
   link: React.ReactNode;
 }
 
-const AuthFooter = ({ loading, link }: AuthFooterProps) => {
+const AuthFooter = ({ loading, link, buttonText }: AuthFooterProps) => {
   return (
     <Box>
       <Button
@@ -15,7 +16,7 @@ const AuthFooter = ({ loading, link }: AuthFooterProps) => {
         color="primary"
         loading={loading}
       >
-        Login
+        {buttonText}
       </Button>
       <Box sx={{ mt: 2, borderTop: 'solid 1px #ddd' }}>
         <Typography variant="body2" align="center" marginTop={2}>

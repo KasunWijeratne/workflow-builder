@@ -37,7 +37,7 @@ const ViewDiagram = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { screenToFlowPosition } = useReactFlow();
-  const { getDiagramById, updateDiagram } = useDiagram();
+  const { getDiagramById, updateDiagram, loading } = useDiagram();
   const { id } = useParams();
 
   //TODO: check if this can be moved into the canvas module
@@ -127,6 +127,7 @@ const ViewDiagram = () => {
               }}
             />
           }
+          loading={loading}
           onSave={onUpdate}
         />
       }

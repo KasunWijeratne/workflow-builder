@@ -29,7 +29,7 @@ const ShareDiagramDialog = forwardRef(
     const { user } = useAuth();
 
     const { getUsers } = useUsers();
-    const { shareDiagram } = useDiagram();
+    const { shareDiagram, loading } = useDiagram();
 
     useImperativeHandle(ref, () => ({
       close: () => setOpen(false),
@@ -44,6 +44,7 @@ const ShareDiagramDialog = forwardRef(
       const shareWith = shareInfo?.value;
       if (!shareWith) return;
       await shareDiagram(id, shareWith);
+      handleClose();
     };
 
     useEffect(() => {
@@ -104,12 +105,18 @@ const ShareDiagramDialog = forwardRef(
             />
           </div>
           <Stack direction="row" spacing={2} justifyContent="flex-end">
-            <Button variant="text" color="secondary" onClick={handleClose}>
+            <Button
+              variant="text"
+              color="secondary"
+              disabled={loading}
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button
               variant="contained"
               color="primary"
+              loading={loading}
               startIcon={<SendIcon />}
               onClick={handleShare}
             >

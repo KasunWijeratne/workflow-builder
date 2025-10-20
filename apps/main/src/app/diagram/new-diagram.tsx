@@ -45,7 +45,7 @@ const NewDiagram = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { screenToFlowPosition } = useReactFlow();
 
-  const { createDiagram } = useDiagram();
+  const { createDiagram, loading } = useDiagram();
 
   //TODO: check if this can be moved into the canvas module
   const onConnect = useCallback(
@@ -100,7 +100,14 @@ const NewDiagram = () => {
     <TopbarWithFloatingControls
       controls={
         <DiagramControls
-          name={<DiagramName name={diagramName} onChange={setDiagramName} />}
+          name={
+            <DiagramName
+              disabled={loading}
+              name={diagramName}
+              onChange={setDiagramName}
+            />
+          }
+          loading={loading}
           onSave={onSave}
         />
       }

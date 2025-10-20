@@ -1,9 +1,8 @@
 import { FormEvent, useRef } from 'react';
-import { Box, Button, Card, Input, Typography } from '@shared/ui';
+import { Input } from '@shared/ui';
 import { useAuth } from '../../context/auth-context';
-import styles from './auth.module.css';
 import { Link } from 'react-router-dom';
-import AuthFooter from './Footer';
+import AuthCompoennt from './AuthCompoennt';
 
 export const LoginComponent = () => {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -22,39 +21,32 @@ export const LoginComponent = () => {
   };
 
   return (
-    <Box
-      component="form"
-      className={styles.layout__login}
+    <AuthCompoennt
+      buttonText="Login"
+      loading={loading}
+      link={
+        <>
+          Don't have an account? <Link to="/signup">Sign up</Link>
+        </>
+      }
       onSubmit={handleLogin}
     >
-      <Card className={styles.container}>
-        <Box>
-          <Input
-            fullWidth
-            required
-            inputRef={emailRef}
-            placeholder="Email"
-            margin="normal"
-          />
-          <Input
-            fullWidth
-            required
-            inputRef={passwordRef}
-            placeholder="password"
-            type="password"
-            margin="normal"
-          />
-        </Box>
-        <AuthFooter
-          loading={loading}
-          link={
-            <>
-              Don't have an account? <Link to="/signup">Sign up</Link>
-            </>
-          }
-        />
-      </Card>
-    </Box>
+      <Input
+        fullWidth
+        required
+        inputRef={emailRef}
+        placeholder="Email"
+        margin="normal"
+      />
+      <Input
+        fullWidth
+        required
+        inputRef={passwordRef}
+        placeholder="password"
+        type="password"
+        margin="normal"
+      />
+    </AuthCompoennt>
   );
 };
 

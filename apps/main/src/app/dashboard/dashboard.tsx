@@ -1,10 +1,10 @@
 import { TopbarLayout, Table, Box, Typography, Button } from '@shared/ui';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 //TODO: move this to different module (diagramModule) so we dont have to load canvas at this point
 import { Diagram, useDiagram } from '@shared/canvas';
 import { useEffect, useState } from 'react';
 import UserMenu from '@/components/UserMenu';
-import { useAuth } from '@shared/auth';
+import { Role, RoleGate, useAuth } from '@shared/auth';
 
 interface DiagramColumn {
   header: string;
@@ -49,13 +49,15 @@ const Dashboard = () => {
           </Typography>{' '}
           Welcome!
         </Typography>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => navigate('/diagram/new')}
-        >
-          Create New Diagram
-        </Button>
+        <RoleGate permissions={[Role.EDITOR]}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => navigate('/diagram/new')}
+          >
+            Create New Diagram
+          </Button>
+        </RoleGate>
       </Box>
 
       <Box mt={4} p={4}>

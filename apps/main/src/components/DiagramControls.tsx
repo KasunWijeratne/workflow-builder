@@ -17,26 +17,33 @@ import { useDiagram } from '@shared/canvas';
 interface DiagramControlsProps {
   id?: string;
   name: ReactNode;
+  loading?: boolean;
   onSave: () => void;
 }
 
 interface DiagramMoreControlsProps {
   id: string;
+  disabled?: boolean;
 }
 
-const DiagramControls = ({ id, name, onSave }: DiagramControlsProps) => {
+const DiagramControls = ({
+  id,
+  name,
+  loading,
+  onSave,
+}: DiagramControlsProps) => {
   const shareDialogRef = useRef<{ open: () => void; close: () => void }>(null);
 
   return (
     <Stack direction="row" spacing={2} justifyContent="space-between">
-      <h3>{name}</h3>
+      <div>{name}</div>
 
       <RoleGate permissions={[Role.EDITOR]}>
         <Stack
           direction="row"
           alignItems={'center'}
           spacing={1}
-          sx={{ background: 'white', borderRadius: 5, pr: 1, pl: 2 }}
+          sx={{ background: 'white', borderRadius: 5, px: 2 }}
         >
           {id && (
             <>
@@ -45,6 +52,7 @@ const DiagramControls = ({ id, name, onSave }: DiagramControlsProps) => {
                 variant="outlined"
                 color="secondary"
                 startIcon={<ShareIcon />}
+                disabled={loading}
                 onClick={() => {
                   shareDialogRef?.current?.open();
                 }}
@@ -58,19 +66,20 @@ const DiagramControls = ({ id, name, onSave }: DiagramControlsProps) => {
             size="small"
             variant="contained"
             color="primary"
+            loading={loading}
             startIcon={<SaveIcon />}
             onClick={onSave}
           >
             Save
           </Button>
-          {id && <DiagramMoreControls id={id} />}
+          {id && <DiagramMoreControls id={id} disabled={loading} />}
         </Stack>
       </RoleGate>
     </Stack>
   );
 };
 
-const DiagramMoreControls = ({ id }: DiagramMoreControlsProps) => {
+const DiagramMoreControls = ({ id, disabled }: DiagramMoreControlsProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { deleteDiagram } = useDiagram();
 
@@ -91,7 +100,12 @@ const DiagramMoreControls = ({ id }: DiagramMoreControlsProps) => {
 
   return (
     <>
-      <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
+      <IconButton
+        disabled={disabled}
+        onClick={handleClick}
+        size="small"
+        sx={{ ml: 2, mr: -2 }}
+      >
         <MoreIcon />
       </IconButton>
       <Menu

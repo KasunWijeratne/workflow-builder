@@ -1,4 +1,11 @@
-import { Box, IconButton, Menu, MenuItem } from '@shared/ui';
+import {
+  Box,
+  IconButton,
+  LogoutIcon,
+  Menu,
+  MenuItem,
+  Typography,
+} from '@shared/ui';
 import { useState } from 'react';
 import { useAuth } from '@shared/auth';
 import { useNavigate } from 'react-router-dom';
@@ -52,10 +59,22 @@ const UserMenu = () => {
           },
         }}
       >
-        <Box sx={{ p: 2, borderBottom: 'solid 1px #eee', mb: 1 }}>
-          {user?.email}
+        <Box
+          sx={{
+            p: 2,
+            mb: 1,
+            borderBottom: 'solid 1px',
+            borderColor: 'border.main',
+          }}
+        >
+          <Typography variant="body2" color="text.secondary">
+            {user?.email}
+          </Typography>
         </Box>
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <LogoutIcon sx={{ mr: 1 }} />
+          Logout
+        </MenuItem>
       </Menu>
     </>
   );

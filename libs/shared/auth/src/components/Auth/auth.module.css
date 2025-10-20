@@ -1,14 +1,19 @@
 .layout__login {
+  padding: 20px;
   width: 100vw;
   height: 100vh;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: linear-gradient(90deg, white, #e5e9ff);
 }
 
 .container {
   height: 300px;
-  width: 400px;
+  width: 600px;
   padding: 20px;
   display: flex;
   flex-direction: column;

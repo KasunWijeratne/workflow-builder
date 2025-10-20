@@ -1,12 +1,14 @@
 import { DoneIcon, EditIcon, IconButton, Stack, Typography } from '@shared/ui';
 import { useRef, useState } from 'react';
+import { Role, RoleGate } from '@shared/auth';
 
 interface DiagramNameProps {
   name: string;
+  disabled?: boolean;
   onChange: (newName: string) => void;
 }
 
-const DiagramName = ({ name, onChange }: DiagramNameProps) => {
+const DiagramName = ({ name, disabled, onChange }: DiagramNameProps) => {
   const nameInput = useRef<HTMLInputElement>(null);
   const [editable, setEditable] = useState(false);
 
@@ -19,7 +21,7 @@ const DiagramName = ({ name, onChange }: DiagramNameProps) => {
     <Stack
       direction="row"
       alignItems={'center'}
-      sx={{ background: 'white', borderRadius: 5, pr: 1, pl: 2, py: '6px' }}
+      sx={{ background: 'white', borderRadius: 5, px: 2, py: '6px' }}
       gap={1}
     >
       {editable && (
@@ -28,13 +30,18 @@ const DiagramName = ({ name, onChange }: DiagramNameProps) => {
             autoFocus
             ref={nameInput}
             defaultValue={name}
+            disabled={disabled}
             style={{
               border: 'none',
               outline: 'none',
               borderBottom: 'solid 1px',
             }}
           />
-          <IconButton size="small" onClick={onUpdate}>
+          <IconButton
+            size="small"
+            sx={{ color: 'secondary.main' }}
+            onClick={onUpdate}
+          >
             <DoneIcon fontSize="small" />
           </IconButton>
         </Stack>
@@ -42,9 +49,16 @@ const DiagramName = ({ name, onChange }: DiagramNameProps) => {
       {!editable && (
         <>
           <Typography variant="body1">{name}</Typography>
-          <IconButton size="small" onClick={() => setEditable(true)}>
-            <EditIcon fontSize="small" sx={{ color: 'secondary.main' }} />
-          </IconButton>
+          <RoleGate permissions={[Role.EDITOR]}>
+            <IconButton
+              disabled={disabled}
+              size="small"
+              sx={{ mr: -1 }}
+              onClick={() => setEditable(true)}
+            >
+              <EditIcon fontSize="small" sx={{ color: 'secondary.main' }} />
+            </IconButton>
+          </RoleGate>
         </>
       )}
     </Stack>
