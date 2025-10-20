@@ -6,6 +6,7 @@ import MUIMenu from '@mui/material/Menu';
 
 import EditOutlined from '@mui/icons-material/EditOutlined';
 import DoneOutlined from '@mui/icons-material/DoneOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 //TODO: move other components to here as well
 export * from './components/Button';
@@ -31,3 +32,4 @@ export * from './layouts/topbar-with-controls.layout';
 // export * from '@mui/icons-material';
 export const EditIcon = EditOutlined;
 export const DoneIcon = DoneOutlined;
+export const MoreIcon = MoreVertIcon;

@@ -8,6 +8,7 @@ import {
   query,
   doc,
   updateDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 import { Diagram } from '../types/diagram.type';
 import { FirebaseError } from '@firebase/util';
@@ -82,6 +83,16 @@ const diagramService = () => {
     }
   };
 
+  const deleteDiagram = async (id: string) => {
+    try {
+      const docRef = doc(db, 'diagrams', id);
+      await deleteDoc(docRef);
+    } catch (error) {
+      console.error('Delete diagram error:', (error as FirebaseError).code);
+      throw error;
+    }
+  };
+
   const shareDiagram = async (diagramId: string, userId: string) => {
     //Share diagram
   };
@@ -92,6 +103,7 @@ const diagramService = () => {
     createNewDiagram,
     updateDiagram,
     shareDiagram,
+    deleteDiagram,
   };
 };
 

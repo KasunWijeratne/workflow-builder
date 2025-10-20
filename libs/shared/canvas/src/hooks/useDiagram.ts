@@ -2,10 +2,12 @@ import { useState } from 'react';
 import diagramService from '../services/diagram.service';
 import { Diagram } from '../types/diagram.type';
 import { useAuth } from '@shared/auth';
+import { useNavigate } from 'react-router-dom';
 
 export const useDiagram = () => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const getDiagrams = async (): Promise<Diagram[]> => {
     setLoading(true);
@@ -36,6 +38,13 @@ export const useDiagram = () => {
     setLoading(false);
   };
 
+  const deleteDiagram = async (diagramId: string) => {
+    setLoading(true);
+    await diagramService().deleteDiagram(diagramId);
+    setLoading(false);
+    navigate('/dashboard');
+  };
+
   const shareDiagram = async (diagramId: string, userId: string) => {
     setLoading(true);
     await diagramService().shareDiagram(diagramId, userId);
@@ -49,6 +58,7 @@ export const useDiagram = () => {
     createDiagram,
     updateDiagram,
     shareDiagram,
+    deleteDiagram,
   };
 };
 

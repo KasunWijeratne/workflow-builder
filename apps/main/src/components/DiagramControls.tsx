@@ -1,12 +1,24 @@
-import { useRef } from 'react';
-import { Button, Stack } from '@shared/ui';
+import { useRef, useState } from 'react';
+import {
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  MoreIcon,
+  Stack,
+} from '@shared/ui';
 import { Role, RoleGate } from '@shared/auth';
 import ShareDiagramDialog from '@/components/ShareDiagramDialog';
+import { useDiagram } from '@shared/canvas';
 
 interface DiagramControlsProps {
   id?: string;
   name: string;
   onSave: () => void;
+}
+
+interface DiagramMoreControlsProps {
+  id: string;
 }
 
 const DiagramControls = ({ id, name, onSave }: DiagramControlsProps) => {
@@ -35,9 +47,46 @@ const DiagramControls = ({ id, name, onSave }: DiagramControlsProps) => {
           <Button variant="contained" color="primary" onClick={onSave}>
             Save
           </Button>
+          {id && <DiagramMoreControls id={id} />}
         </Stack>
       </RoleGate>
     </Stack>
+  );
+};
+
+const DiagramMoreControls = ({ id }: DiagramMoreControlsProps) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { deleteDiagram } = useDiagram();
+
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDeleteDiagram = async () => {
+    //TODO: get a confirmation before doing this
+    await deleteDiagram(id);
+  };
+
+  return (
+    <>
+      <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
+        <MoreIcon />
+      </IconButton>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleDeleteDiagram}>Delete</MenuItem>
+      </Menu>
+    </>
   );
 };
 
