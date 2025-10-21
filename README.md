@@ -16,6 +16,26 @@ Simple visual diagram builder built with React Flow.
 
 ## Screenshots
 
+#### Login and Signup
+<img width="1247" height="747" alt="image" src="https://github.com/user-attachments/assets/cfe59e47-a621-4e10-a287-0fa400c82dcf" />
+<img width="1245" height="747" alt="image" src="https://github.com/user-attachments/assets/71a91270-4b56-433a-817e-4e5324bf53fe" />
+
+#### Dashboard (with user menu (Profile view) opened) 
+<img width="1245" height="747" alt="image" src="https://github.com/user-attachments/assets/0ac70318-7bce-4ac3-8643-c41c06f271d0" />
+
+#### Create diagram (with editable text in Node)
+<img width="1245" height="747" alt="image" src="https://github.com/user-attachments/assets/72617aed-d2ec-46c3-9051-fcddf6b9843b" />
+
+#### Opened a created diagram (with Share and Menu cta)
+<img width="1245" height="747" alt="image" src="https://github.com/user-attachments/assets/f97a098e-0e19-4510-b0fa-c952c2ddf5e0" />
+
+#### Share diagram view (with autocomplete list)
+<img width="1245" height="747" alt="image" src="https://github.com/user-attachments/assets/36eb8cb2-1f39-491c-85d7-9ef40895ef3b" />
+
+#### Dark mode On
+<img width="1245" height="747" alt="image" src="https://github.com/user-attachments/assets/a4c5ed79-37d9-4093-9b2b-2c5c1218cf03" />
+
+
 ## Architecture
 
 ### Thinking
@@ -79,7 +99,5 @@ To see all available targets to run for a project, run:
 ```sh
 npx nx show project main
 ```
-
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
 
 You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin.
