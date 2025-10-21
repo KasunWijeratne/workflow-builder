@@ -4,6 +4,7 @@ import React, { Suspense } from 'react';
 
 const Login = React.lazy(() => import('@/app/auth/login'));
 const SignUp = React.lazy(() => import('@/app/auth/signup'));
+const Unauthorized = React.lazy(() => import('./unauthorized-route'));
 
 export const authRoutes: AppRouteObject[] = [
   {
@@ -25,6 +26,17 @@ export const authRoutes: AppRouteObject[] = [
     element: (
       <Suspense fallback={<LinearProgress />}>
         <SignUp />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/unauthorized',
+    meta: {
+      permissions: [],
+    },
+    element: (
+      <Suspense fallback={<LinearProgress />}>
+        <Unauthorized />
       </Suspense>
     ),
   },
