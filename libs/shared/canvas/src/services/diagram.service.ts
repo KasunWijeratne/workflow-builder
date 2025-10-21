@@ -33,8 +33,8 @@ const diagramService = () => {
         getDocs(qShared),
       ]);
 
-      const data = querySnapshot.flatMap((snapshot) => {
-        return snapshot.docs.map((doc, i) => {
+      const data = querySnapshot.flatMap((snapshot, i) => {
+        return snapshot.docs.map((doc) => {
           const data = doc.data();
           return {
             id: doc.id,
