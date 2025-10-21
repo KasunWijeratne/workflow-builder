@@ -11,10 +11,14 @@ const RootRoute = () => {
     if (!loading && user?.id) {
       navigate('/dashboard');
     }
-    if (location.pathname !== '/login' && location.pathname !== '/signup') {
+    if (
+      !user?.id &&
+      location.pathname !== '/login' &&
+      location.pathname !== '/signup'
+    ) {
       navigate('/login');
     }
-  }, [user, loading, location.pathname]);
+  }, [user, location.pathname, loading, navigate]);
 
   return <Outlet />;
 };

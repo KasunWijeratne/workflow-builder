@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       setLoading(true);
       await authService().signUp({ email, password, roles });
-      window.location.assign(successRedirect);
+      // window.location.assign(successRedirect);
       addNotification(`Signup success`, 'success');
     } catch (error) {
       const code = (error as AuthError).code;
