@@ -2,12 +2,13 @@ import { Table, Box, Typography, Button } from '@shared/ui';
 import { useNavigate } from 'react-router-dom';
 //TODO: move this to different module (diagramModule) so we dont have to load canvas at this point
 import { Diagram, useDiagram } from '@shared/canvas';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Role, RoleGate, useAuth } from '@shared/auth';
 
 interface DiagramColumn {
   header: string;
   accessorKey: keyof Diagram;
+  component?: (value: string) => ReactNode;
 }
 
 const Dashboard = () => {
@@ -85,7 +86,27 @@ const Dashboard = () => {
 const columns: DiagramColumn[] = [
   { header: 'Name', accessorKey: 'name' },
   { header: 'Created By', accessorKey: 'createdBy' },
-  { header: 'Ownership', accessorKey: 'shared' },
+  {
+    header: 'Ownership',
+    accessorKey: 'shared',
+    component: (value: string) => {
+      return (
+        <Box
+          sx={{
+            bgcolor: value === 'Shared' ? 'secondary.light' : 'primary.light',
+            px: 1,
+            py: '4px',
+            width: 'fit-content',
+            borderRadius: 5,
+          }}
+        >
+          <Typography variant="caption" color="primary.contrastText">
+            {value}
+          </Typography>
+        </Box>
+      );
+    },
+  },
 ];
 
 export default Dashboard;

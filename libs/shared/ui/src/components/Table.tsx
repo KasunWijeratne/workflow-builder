@@ -5,12 +5,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { ReactNode } from 'react';
 
 interface TableProps<T extends { id: string; name: string }> {
   rows: Array<T>;
   columns: Array<{
     header: string;
     accessorKey: keyof T;
+    component?: (value: string) => ReactNode;
     props?: { [key: string]: number | string };
   }>;
   onRowClick?: (row: T) => void;
@@ -54,7 +56,9 @@ export const Table = <T extends { id: string; name: string }>({
                   component="th"
                   scope="row"
                 >
-                  {String(row[column.accessorKey])}
+                  {column.component &&
+                    column.component(String(row[column.accessorKey]))}
+                  {!column.component && String(row[column.accessorKey])}
                 </TableCell>
               ))}
             </TableRow>
