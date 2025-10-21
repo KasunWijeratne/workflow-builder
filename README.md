@@ -52,7 +52,11 @@ Can be check via `//TODO` comments in the code.
 
 ## Run tasks
 
-To run the dev server for your app, use:
+To run the dev server for your app,
+
+Make sure the correct variables are setup in the `.env` file in `apps/main`
+
+...then use:
 
 ```sh
 npx nx serve main
