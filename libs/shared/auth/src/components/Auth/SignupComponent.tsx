@@ -36,6 +36,7 @@ export const SignupComponent = () => {
       <Input
         fullWidth
         required
+        type="email"
         inputRef={emailRef}
         placeholder="Email"
         margin="normal"
